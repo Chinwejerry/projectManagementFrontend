@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: all;
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+}
