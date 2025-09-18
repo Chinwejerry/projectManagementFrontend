@@ -45,8 +45,8 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="flex flex-col flex-1">
         {/* Navbar */}
-        <header className="flex justify-between items-center bg-white shadow px-4 py-2">
-          <div className="flex items-center gap-2 bg-gray-100 px-2 rounded">
+        <header className="flex justify-between items-center text-black bg-white shadow px-4 py-2">
+          <div className="flex items-center gap-2 bg-gray-100  px-2 rounded">
             <Search size={18} className="text-gray-500" />
             <input
               type="text"

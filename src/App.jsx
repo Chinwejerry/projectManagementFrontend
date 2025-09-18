@@ -6,6 +6,8 @@ import TaskPage from "./pages/taskPage";
 import WorkLog from "./pages/workLog";
 import Login from "./pages/login";
 import CreateUser from "./pages/createUser";
+import ProjectsPage from "./pages/projects";
+import UsersPage from "./pages/usersPage";
 
 function App() {
   return (
@@ -17,6 +19,9 @@ function App() {
         <Route path="/workLog" element={<WorkLog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/createUser" element={<CreateUser />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/usersPage" element={<UsersPage />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
     </Routes>
   );

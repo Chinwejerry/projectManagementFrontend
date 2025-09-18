@@ -14,7 +14,7 @@ const CreateUser = () => {
           <input
             type="text"
             name="name"
-            placeholder="John Doe"
+            placeholder="Chinwe"
             className="input input-bordered w-full"
             required
           />
@@ -62,7 +62,6 @@ const CreateUser = () => {
               Select a role
             </option>
             <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
             <option value="user">User</option>
           </select>
         </div>
