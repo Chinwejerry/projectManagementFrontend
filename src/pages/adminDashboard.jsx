@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Home,
   Folder,
@@ -7,6 +8,7 @@ import {
   Search,
   UserCircle,
 } from "lucide-react";
+import { Link } from "react-router";
 
 const AdminDashboard = () => {
   return (
@@ -15,30 +17,30 @@ const AdminDashboard = () => {
       <aside className="hidden md:flex flex-col w-64 bg-base-200 p-4">
         <h1 className="text-2xl font-bold mb-6">PM Admin</h1>
         <nav className="flex flex-col space-y-2">
-          <a
-            href="#"
+          <Link
+            to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Home size={18} /> Dashboard
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/projects"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Folder size={18} /> Projects
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/usersPage"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Users size={18} /> Users
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Settings size={18} /> Settings
-          </a>
+          </Link>
         </nav>
       </aside>
 

@@ -2,7 +2,7 @@ import React from "react";
 
 const CreateUser = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)]  bg-no-repeat bg-center bg-cover p-4">
       <form className="card bg-base-100 w-full max-w-lg shadow-md p-6 space-y-4">
         <h2 className="text-2xl font-bold text-center">Create User</h2>
 
