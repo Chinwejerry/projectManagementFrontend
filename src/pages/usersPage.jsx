@@ -1,46 +1,43 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Edit, Trash2, UserCircle } from "lucide-react";
 
-const initialUsers = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice@mail.com",
-    role: "Admin",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    email: "bob@mail.com",
-    role: "Manager",
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Charlie Brown",
-    email: "charlie@mail.com",
-    role: "User",
-    status: "Inactive",
-  },
-  {
-    id: 4,
-    name: "Diana Prince",
-    email: "diana@mail.com",
-    role: "User",
-    status: "Active",
-  },
-];
-
 const UsersPage = () => {
-  const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]); // state for users
+  const [search, setSearch] = useState(""); // state for search
+  const [loading, setLoading] = useState(true); // state for loading
+  const [error, setError] = useState(null); // state for errors
 
-  const filteredUsers = initialUsers.filter(
+  // Fetch users from backend API (mock example)
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+        const data = await response.json();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []); // runs only once on component mount
+
+  // Filter users based on search query
+  const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(search.toLowerCase()) ||
       user.email.toLowerCase().includes(search.toLowerCase()) ||
       user.role.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Handle loading and errors
+  if (loading) return <p className="p-4">Loading users...</p>;
+  if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
