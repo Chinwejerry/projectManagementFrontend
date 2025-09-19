@@ -13,7 +13,7 @@ const ProjectsPage = () => {
       try {
         const token = localStorage.getItem("token");
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/projects`,
+          " https://projectmanegerbackend-1.onrender.com/api/projects",
           {
             headers: {
               Authorization: `Bearer ${token}`,
