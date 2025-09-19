@@ -1,46 +1,36 @@
-import React, { useState } from "react";
-import { Search, Plus, Users, Calendar } from "lucide-react";
-import { Link } from "react-router";
-
-const initialProjects = [
-  {
-    id: 1,
-    name: "Website Redesign",
-    status: "Active",
-    start: "2025-09-01",
-    end: "2025-10-15",
-    team: 4,
-  },
-  {
-    id: 2,
-    name: "Mobile App",
-    status: "Planning",
-    start: "2025-09-10",
-    end: "2025-11-01",
-    team: 3,
-  },
-  {
-    id: 3,
-    name: "Marketing Campaign",
-    status: "Completed",
-    start: "2025-08-01",
-    end: "2025-09-01",
-    team: 5,
-  },
-  {
-    id: 4,
-    name: "CRM Integration",
-    status: "Active",
-    start: "2025-09-05",
-    end: "2025-12-01",
-    team: 2,
-  },
-];
+import React, { useState, useEffect } from "react";
+import { Search, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const ProjectsPage = () => {
+  const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
 
-  const filteredProjects = initialProjects.filter(
+  // Fetch projects from Render backend
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/projects`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Filter projects based on search input
+  const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(search.toLowerCase()) ||
       project.status.toLowerCase().includes(search.toLowerCase())
@@ -48,7 +38,7 @@ const ProjectsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Page Header */}
+      {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
         <Link to="/" className="text-2xl font-bold flex items-center gap-2">
           Projects
@@ -79,21 +69,20 @@ const ProjectsPage = () => {
               <tr>
                 <th>Project Name</th>
                 <th>Status</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Team</th>
+                <th>Created At</th>
+                <th>Created By</th>
               </tr>
             </thead>
             <tbody>
               {filteredProjects.map((project) => (
-                <tr key={project.id}>
+                <tr key={project._id}>
                   <td>{project.name}</td>
                   <td>
                     <span
                       className={`badge ${
-                        project.status === "Active"
+                        project.status === "active"
                           ? "badge-primary"
-                          : project.status === "Planning"
+                          : project.status === "planning"
                           ? "badge-secondary"
                           : "badge-accent"
                       }`}
@@ -101,16 +90,15 @@ const ProjectsPage = () => {
                       {project.status}
                     </span>
                   </td>
-                  <td>{project.start}</td>
-                  <td>{project.end}</td>
-                  <td className="flex items-center gap-1">
-                    <Users size={16} /> {project.team}
+                  <td>{new Date(project.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    {project.createdBy?.firstName} {project.createdBy?.lastName}
                   </td>
                 </tr>
               ))}
               {filteredProjects.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-4">
+                  <td colSpan={4} className="text-center py-4">
                     No projects found.
                   </td>
                 </tr>
