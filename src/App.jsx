@@ -13,11 +13,11 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route index element={<AdminDashboard />} />
+        <Route index element={<Login />} />
         <Route path="/userDashboard" element={<UserDashboard />} />
         <Route path="/taskPage" element={<TaskPage />} />
         <Route path="/workLog" element={<WorkLog />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/createUser" element={<CreateUser />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/usersPage" element={<UsersPage />} />
