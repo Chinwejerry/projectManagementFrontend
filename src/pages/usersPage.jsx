@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, Edit, Trash2, UserCircle } from "lucide-react";
+import { Link } from "react-router";
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]); // state for users
@@ -11,12 +12,24 @@ const UsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        const token = localStorage.getItem("token"); // after login, store it here
         const response = await fetch(
-          "https://projectmanegerbackend-1.onrender.com/api/users"
+          "https://projectmanegerbackend-1.onrender.com/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
+
         if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error("Unauthorized – please log in as an admin");
+          }
           throw new Error("Failed to fetch users");
         }
+
         const data = await response.json();
         setUsers(data);
       } catch (err) {
@@ -27,25 +40,28 @@ const UsersPage = () => {
     };
 
     fetchUsers();
-  }, []); // runs only once on component mount
+  }, []);
+  // runs only once on component mount
 
   // Filter users based on search query
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase()) ||
-      user.role.toLowerCase().includes(search.toLowerCase())
+      (user.firstName?.toLowerCase() || "").includes(search.toLowerCase()) ||
+      (user.lastName?.toLowerCase() || "").includes(search.toLowerCase()) ||
+      (user.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
+      (user.role?.toLowerCase() || "").includes(search.toLowerCase())
   );
-
   // Handle loading and errors
   if (loading) return <p className="p-4">Loading users...</p>;
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-[url(images/1.png)]  bg-no-repeat bg-center bg-cover ">
       {/* Page Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-center bg-white shadow px-4 py-3 gap-3">
-        <h1 className="text-2xl font-bold flex items-center gap-2">Users</h1>
+      <header className="flex flex-col sm:flex-row justify-between items-center bg-transparent shadow px-4 py-3 gap-3">
+        <Link to="/" className="text-2xl font-bold flex items-center  gap-2">
+          Users
+        </Link>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="flex items-center bg-gray-100 px-2 rounded w-full">
@@ -58,9 +74,12 @@ const UsersPage = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="btn btn-primary flex items-center gap-2">
+          <Link
+            to="/createUser"
+            className="btn btn-primary flex items-center gap-2"
+          >
             <UserCircle size={16} /> Add User
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -71,6 +90,7 @@ const UsersPage = () => {
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
@@ -80,7 +100,8 @@ const UsersPage = () => {
             <tbody>
               {filteredUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.name}</td>
+                  <td>{user.firstName}</td>
+                  <td>{user.lastName}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>
