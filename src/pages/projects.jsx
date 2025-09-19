@@ -6,7 +6,7 @@ import axios from "axios";
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
-
+  //test
   // Fetch projects from Render backend
   useEffect(() => {
     const fetchProjects = async () => {
