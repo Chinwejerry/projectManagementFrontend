@@ -133,7 +133,7 @@ const EditUserPage = () => {
 
           <div className="flex justify-between">
             <Link
-              to="/users"
+              to="/usersPage"
               className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
             >
               Cancel

@@ -16,7 +16,7 @@ const UserDashboard = () => {
         </div>
         <div className="flex items-center gap-2">
           <UserCircle size={32} className="text-gray-600" />
-          <span className="font-medium">John Doe</span>
+          <span className="font-medium text-black">Maryam Kerchi</span>
         </div>
       </header>
 
