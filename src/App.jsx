@@ -9,6 +9,7 @@ import CreateUser from "./pages/createUser";
 import UsersPage from "./pages/usersPage";
 import Projects from "./pages/projects";
 import CreateProject from "./pages/createProject.jsx";
+import EditUserPage from "./pages/edit.jsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/createProject" element={<CreateProject />} />
+        <Route path="/edit/:id" element={<EditUserPage />} />
       </Route>
     </Routes>
   );
