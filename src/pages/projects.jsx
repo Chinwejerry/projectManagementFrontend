@@ -40,7 +40,10 @@ const ProjectsPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
-        <Link to="/" className="text-2xl font-bold flex items-center gap-2">
+        <Link
+          to="/adminDashboard"
+          className="text-2xl font-bold flex items-center gap-2"
+        >
           Projects
         </Link>
 

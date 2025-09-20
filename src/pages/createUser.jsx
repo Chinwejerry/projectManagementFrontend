@@ -2,7 +2,8 @@ import { useState } from "react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CreateUser = () => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user"); // default role
@@ -31,7 +32,13 @@ const CreateUser = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ name, email, password, role }),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password, // 🔑 required
+            role, // optional
+          }),
         }
       );
 
@@ -63,10 +70,18 @@ const CreateUser = () => {
 
         <input
           type="text"
-          placeholder="Name"
+          placeholder="First Name"
           className="border p-2 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          className="border p-2 rounded"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
 
