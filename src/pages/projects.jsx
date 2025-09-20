@@ -13,7 +13,7 @@ const Projects = () => {
       try {
         const token = localStorage.getItem("token");
         const { data } = await axios.get(
-          "https://projectmanegerbackend-1.onrender.com/api/projects",
+          " https://projectmanegerbackend-1.onrender.com/api/projects",
           {
             headers: {
               Authorization: `Bearer ${token}`,
