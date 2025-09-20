@@ -54,6 +54,33 @@ const UsersPage = () => {
   // Handle loading and errors
   if (loading) return <p className="p-4">Loading users...</p>;
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `https://projectmanegerbackend-1.onrender.com/api/users/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to delete user");
+      }
+
+      // Remove from state without refetch
+      setUsers((prev) => prev.filter((user) => user._id !== id));
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[url(images/1.png)]  bg-no-repeat bg-center bg-cover ">
@@ -119,12 +146,22 @@ const UsersPage = () => {
                     </span>
                   </td>
                   <td className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
+                    {/* <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
                       <Edit size={14} /> Edit
-                    </button>
-                    <button className="btn btn-sm btn-outline btn-error flex items-center gap-1">
+                    </button> */}
+                    <Link
+                      to={`/edit/${user._id}`}
+                      className="btn btn-sm btn-outline btn-success flex items-center gap-1"
+                    >
+                      <Edit size={14} /> Edit
+                    </Link>
+
+                    <Link
+                      className="btn btn-sm btn-outline btn-error flex items-center gap-1"
+                      onClick={() => handleDelete(user._id)}
+                    >
                       <Trash2 size={14} /> Delete
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
