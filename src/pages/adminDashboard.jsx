@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         <h1 className="text-2xl font-bold mb-6">PM Admin</h1>
         <nav className="flex flex-col space-y-2">
           <Link
-            to="/"
+            to="/adminDashboard"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Home size={18} /> Dashboard

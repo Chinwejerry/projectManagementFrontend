@@ -59,7 +59,10 @@ const UsersPage = () => {
     <div className="flex flex-col min-h-screen bg-[url(images/1.png)]  bg-no-repeat bg-center bg-cover ">
       {/* Page Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-transparent shadow px-4 py-3 gap-3">
-        <Link to="/" className="text-2xl font-bold flex items-center  gap-2">
+        <Link
+          to="/adminDashboard"
+          className="text-2xl font-bold flex items-center  gap-2"
+        >
           Users
         </Link>
 
@@ -99,7 +102,7 @@ const UsersPage = () => {
             </thead>
             <tbody>
               {filteredUsers.map((user) => (
-                <tr key={user.id}>
+                <tr key={user._id}>
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
                   <td>{user.email}</td>
