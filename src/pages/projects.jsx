@@ -3,11 +3,11 @@ import { Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const ProjectsPage = () => {
+const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
-  //test
-  // Fetch projects from Render backend
+
+  // گرفتن لیست پروژه‌ها از بکند
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -29,7 +29,7 @@ const ProjectsPage = () => {
     fetchProjects();
   }, []);
 
-  // Filter projects based on search input
+  // فیلتر کردن پروژه‌ها با سرچ
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -40,9 +40,7 @@ const ProjectsPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
-        <Link to="/" className="text-2xl font-bold flex items-center gap-2">
-          Projects
-        </Link>
+        <h1 className="text-2xl font-bold flex items-center gap-2">Projects</h1>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="flex items-center bg-gray-100 px-2 rounded w-full">
@@ -55,9 +53,14 @@ const ProjectsPage = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="btn btn-primary flex items-center gap-2">
+
+          {/* دکمه رفتن به createProject */}
+          <Link
+            to="/createProject"
+            className="btn btn-primary flex items-center gap-2"
+          >
             <Plus size={16} /> Add Project
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -111,4 +114,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default Projects;
