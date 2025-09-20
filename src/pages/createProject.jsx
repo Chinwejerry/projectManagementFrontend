@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const CreateProject = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("planning");
+  const [status, setStatus] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ const CreateProject = () => {
       }
 
       const res = await fetch(
-        "https://projectmanegerbackend-1.onrender.com/api/projects",
+        "https://projectmanegerbackend-1.onrender.com/api/projects", // بهتره از متغیر محیطی استفاده کنیم
         {
           method: "POST",
           headers: {
@@ -38,21 +38,23 @@ const CreateProject = () => {
             name,
             description,
             status,
-            members: [], // can add later
-            attachments: [], // can add later
+            members: [],
+            attachments: [],
           }),
         }
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error("Failed to create project");
+        // نمایش پیام واقعی سرور
+        throw new Error(data.message || "Failed to create project");
       }
 
-      await res.json();
-
       alert("Project created successfully ✅");
-      navigate("/projects"); // return to projects page
+      navigate("/projects");
     } catch (err) {
+      console.error("Create project error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -89,8 +91,9 @@ const CreateProject = () => {
           className="border p-2 rounded"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
+          required
         >
-          <option value="planning">Planning</option>
+          <option value="">-- Select Status --</option>
           <option value="pending">Pending</option>
           <option value="in-progress">In Progress</option>
           <option value="completed">Completed</option>

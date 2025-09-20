@@ -13,7 +13,7 @@ const Projects = () => {
       try {
         const token = localStorage.getItem("token");
         const { data } = await axios.get(
-          " https://projectmanegerbackend-1.onrender.com/api/projects",
+          "https://projectmanegerbackend-1.onrender.com/api/projects",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -46,7 +46,6 @@ const Projects = () => {
         >
           Projects
         </Link>
-
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="flex items-center bg-gray-100 px-2 rounded w-full">
@@ -89,11 +88,13 @@ const Projects = () => {
                   <td>
                     <span
                       className={`badge ${
-                        project.status === "active"
-                          ? "badge-primary"
-                          : project.status === "planning"
-                          ? "badge-secondary"
-                          : "badge-accent"
+                        project.status === "pending"
+                          ? "badge-warning"
+                          : project.status === "in-progress"
+                          ? "badge-info"
+                          : project.status === "completed"
+                          ? "badge-success"
+                          : "badge-ghost"
                       }`}
                     >
                       {project.status}
