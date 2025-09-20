@@ -6,6 +6,7 @@ import {
   Users,
   Settings,
   Search,
+  ClipboardList,
   UserCircle,
 } from "lucide-react";
 import { Link } from "react-router";
@@ -34,6 +35,12 @@ const AdminDashboard = () => {
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
           >
             <Users size={18} /> Users
+          </Link>
+          <Link
+            to="/taskPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <ClipboardList size={18} /> Tasks
           </Link>
           <Link
             to="#"
