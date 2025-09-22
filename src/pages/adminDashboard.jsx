@@ -1,4 +1,6 @@
+
 //adminDashboard.jsx
+
 import { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -14,6 +16,7 @@ const AdminDashboardMain = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const projectRes = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/projects",
           {
@@ -28,6 +31,7 @@ const AdminDashboardMain = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
         const taskData = await taskRes.json();
 
         setProjects(projectData);
