@@ -71,7 +71,7 @@ const CreateUser = () => {
         <input
           type="text"
           placeholder="First Name"
-          className="border p-2 rounded"
+          className="border p-2 rounded text-gray-300 bg-amber-50"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
@@ -79,7 +79,7 @@ const CreateUser = () => {
         <input
           type="text"
           placeholder="Last Name"
-          className="border p-2 rounded"
+          className="border p-2 rounded text-gray-300 bg-amber-50"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           required
@@ -88,7 +88,7 @@ const CreateUser = () => {
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 rounded"
+          className="border p-2 rounded text-gray-300 bg-amber-50"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -97,14 +97,14 @@ const CreateUser = () => {
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 rounded"
+          className="border p-2 rounded text-gray-300 bg-amber-50"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded text-gray-300 bg-amber-50"
           value={role}
           onChange={(e) => setRole(e.target.value)}
         >

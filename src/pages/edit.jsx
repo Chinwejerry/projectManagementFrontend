@@ -91,7 +91,7 @@ const EditUserPage = () => {
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full border rounded p-2"
+              className="w-full border rounded p-2  text-gray-700 bg-amber-50"
               required
             />
           </div>
@@ -102,7 +102,7 @@ const EditUserPage = () => {
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full border rounded p-2"
+              className="w-full border  text-gray-700 bg-amber-50 rounded p-2"
               required
             />
           </div>
@@ -115,7 +115,7 @@ const EditUserPage = () => {
               type="email"
               value={email}
               disabled
-              className="w-full border rounded p-2 bg-gray-100 cursor-not-allowed"
+              className="w-full border rounded p-2  text-gray-700 bg-amber-50 cursor-not-allowed"
             />
           </div>
 
@@ -124,7 +124,7 @@ const EditUserPage = () => {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full border rounded p-2"
+              className="w-full border rounded  text-gray-700 bg-amber-50 p-2"
             >
               <option value="user">User</option>
               <option value="admin">Admin</option>

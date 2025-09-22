@@ -11,6 +11,7 @@ import Projects from "./pages/projects";
 import CreateProject from "./pages/createProject.jsx";
 import EditUserPage from "./pages/edit.jsx";
 import CreateTask from "./pages/createTask.jsx";
+import ProfilePage from "./pages/profilePage";
 
 function App() {
   return (
@@ -23,11 +24,12 @@ function App() {
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/createUser" element={<CreateUser />} />
         <Route path="/usersPage" element={<UsersPage />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="/profilePage" element={<ProfilePage />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/createProject" element={<CreateProject />} />
         <Route path="/edit/:id" element={<EditUserPage />} />
         <Route path="/createTask" element={<CreateTask />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
     </Routes>
   );
