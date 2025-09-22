@@ -118,7 +118,7 @@ const UserDashboard = () => {
         {/* Tasks Section */}
         <div className="grid lg:grid-cols-2 gap-6">
           <div className="card bg-base-100 shadow p-4 max-h-96 overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-3">Assigned Tasks</h3>
+            <h3 className="text-lg font-semibold mb-3">My Tasks</h3>
             <ul className="divide-y">
               {tasks.map((t) => (
                 <li key={t._id} className="py-2 flex justify-between">
