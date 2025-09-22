@@ -63,10 +63,10 @@ const AdminDashboard = () => {
               className="bg-transparent outline-none p-1"
             />
           </div>
-          <div className="flex items-center gap-2">
+          <Link to="/profilePage" className="flex items-center gap-2">
             <UserCircle size={32} className="text-gray-600" />
             <span className="font-medium">Admin</span>
-          </div>
+          </Link>
         </header>
 
         {/* Dashboard Content */}

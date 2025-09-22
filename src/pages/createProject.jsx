@@ -63,7 +63,10 @@ const CreateTask = () => {
       const data = await res.json();
 
       if (!res.ok) {
+
         throw new Error(data.message || "Failed to create task");
+
+
       }
 
       alert("Task created successfully ✅");
@@ -87,63 +90,26 @@ const CreateTask = () => {
 
         <input
           type="text"
-          placeholder="Task Title"
-          className="border p-2 rounded"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+
+          placeholder="Project Name"
+          className="border p-2  text-gray-300 bg-amber-50 rounded"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+
           required
         />
 
         <textarea
           placeholder="Description"
-          className="border p-2 rounded"
+          className="border p-2 rounded  text-gray-300 bg-amber-50"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
         <select
-          className="border p-2 rounded"
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
-          required
-        >
-          <option value="">-- Select Project --</option>
-          {projects.map((proj) => (
-            <option key={proj._id} value={proj._id}>
-              {proj.name}
-            </option>
-          ))}
-        </select>
 
-        <select
-          className="border p-2 rounded"
-          value={assignedTo}
-          onChange={(e) => setAssignedTo(e.target.value)}
-        >
-          <option value="">-- Assign To (optional) --</option>
-          {users.map((user) => (
-            <option key={user._id} value={user._id}>
-              {user.name}
-            </option>
-          ))}
-        </select>
+          className="border p-2 rounded  text-gray-300 bg-amber-50"
 
-        <select
-          className="border p-2 rounded"
-          value={types}
-          onChange={(e) => setTypes(e.target.value)}
-          required
-        >
-          <option value="">-- Select Type --</option>
-          <option value="Support">Support</option>
-          <option value="Training">Training</option>
-          <option value="Monitoring">Monitoring</option>
-          <option value="Production">Production</option>
-          <option value="R&D">R&D</option>
-        </select>
-
-        <select
-          className="border p-2 rounded"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           required
