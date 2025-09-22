@@ -47,7 +47,6 @@ const CreateProject = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        // نمایش پیام واقعی سرور
         throw new Error(data.message || "Failed to create project");
       }
 
@@ -74,7 +73,7 @@ const CreateProject = () => {
         <input
           type="text"
           placeholder="Project Name"
-          className="border p-2 rounded"
+          className="border p-2  text-gray-300 bg-amber-50 rounded"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -82,13 +81,13 @@ const CreateProject = () => {
 
         <textarea
           placeholder="Description"
-          className="border p-2 rounded"
+          className="border p-2 rounded  text-gray-300 bg-amber-50"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded  text-gray-300 bg-amber-50"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           required
