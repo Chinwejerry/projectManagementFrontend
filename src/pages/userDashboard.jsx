@@ -1,7 +1,100 @@
-import React from "react";
+//userDashboard.jsx
+import { useState, useEffect } from "react";
 import { Search, UserCircle } from "lucide-react";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const UserDashboard = () => {
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const taskRes = await fetch(
+          "https://projectmanegerbackend-1.onrender.com/api/tasks",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const taskData = await taskRes.json();
+
+        const projectRes = await fetch(
+          "https://projectmanegerbackend-1.onrender.com/api/projects",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const projectData = await projectRes.json();
+
+        setTasks(taskData);
+        setProjects(projectData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  if (loading) return <p>Loading...</p>;
+
+  // آماده‌سازی داده برای نمودار Pie تسک‌ها
+  const taskStatusCounts = {
+    pending: 0,
+    "in-progress": 0,
+    completed: 0,
+  };
+  tasks.forEach((t) => {
+    if (taskStatusCounts[t.status] !== undefined) taskStatusCounts[t.status]++;
+  });
+
+  const taskChartData = {
+    labels: ["Pending", "In Progress", "Completed"],
+    datasets: [
+      {
+        data: [
+          taskStatusCounts["pending"],
+          taskStatusCounts["in-progress"],
+          taskStatusCounts["completed"],
+        ],
+        backgroundColor: ["#facc15", "#3b82f6", "#16a34a"],
+      },
+    ],
+  };
+
+  // آماده‌سازی داده برای نمودار Pie پروژه‌ها
+  const projectStatusCounts = {
+    pending: 0,
+    "in-progress": 0,
+    completed: 0,
+  };
+  projects.forEach((p) => {
+    if (projectStatusCounts[p.status] !== undefined)
+      projectStatusCounts[p.status]++;
+  });
+
+  const projectChartData = {
+    labels: ["Pending", "In Progress", "Completed"],
+    datasets: [
+      {
+        data: [
+          projectStatusCounts["pending"],
+          projectStatusCounts["in-progress"],
+          projectStatusCounts["completed"],
+        ],
+        backgroundColor: ["#facc15", "#3b82f6", "#16a34a"],
+      },
+    ],
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
@@ -16,64 +109,68 @@ const UserDashboard = () => {
         </div>
         <div className="flex items-center gap-2">
           <UserCircle size={32} className="text-gray-600" />
-          <span className="font-medium text-black">Maryam Kerchi</span>
+          <span className="font-medium text-black">uuu</span>
         </div>
       </header>
 
       {/* Main content */}
       <main className="flex-1 p-4 space-y-6 overflow-y-auto">
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-semibold">Assigned Tasks</h3>
-            <p className="text-2xl font-bold">12</p>
+        {/* Tasks Section */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div className="card bg-base-100 shadow p-4 max-h-96 overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-3">My Tasks</h3>
+            <ul className="divide-y">
+              {tasks.map((t) => (
+                <li key={t._id} className="py-2 flex justify-between">
+                  <span>{t.title}</span>
+                  <span
+                    className={`badge ${
+                      t.status === "completed"
+                        ? "badge-success"
+                        : t.status === "in-progress"
+                        ? "badge-primary"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {t.status.replace("-", " ")}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-semibold">Projects</h3>
-            <p className="text-2xl font-bold">5</p>
-          </div>
-          <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-semibold">Upcoming Deadlines</h3>
-            <p className="text-2xl font-bold">3</p>
+            <h3 className="text-lg font-semibold mb-3">Tasks Status</h3>
+            <Pie data={taskChartData} />
           </div>
         </div>
 
-        {/* Recent Tasks */}
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold mb-3">Recent Tasks</h3>
-          <ul className="divide-y">
-            <li className="py-2 flex justify-between">
-              <span>Design Homepage</span>
-              <span className="badge badge-primary">In Progress</span>
-            </li>
-            <li className="py-2 flex justify-between">
-              <span>Write API Documentation</span>
-              <span className="badge badge-secondary">Pending</span>
-            </li>
-            <li className="py-2 flex justify-between">
-              <span>Team Meeting Preparation</span>
-              <span className="badge badge-accent">Completed</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Projects List */}
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold mb-3">Projects Overview</h3>
-          <ul className="divide-y">
-            <li className="py-2 flex justify-between">
-              <span>Website Redesign</span>
-              <span className="badge badge-primary">Active</span>
-            </li>
-            <li className="py-2 flex justify-between">
-              <span>Mobile App</span>
-              <span className="badge badge-secondary">Planning</span>
-            </li>
-            <li className="py-2 flex justify-between">
-              <span>Marketing Campaign</span>
-              <span className="badge badge-accent">Completed</span>
-            </li>
-          </ul>
+        {/* Projects Section */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div className="card bg-base-100 shadow p-4 max-h-96 overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-3">Projects Overview</h3>
+            <ul className="divide-y">
+              {projects.map((p) => (
+                <li key={p._id} className="py-2 flex justify-between">
+                  <span>{p.name}</span>
+                  <span
+                    className={`badge ${
+                      p.status === "completed"
+                        ? "badge-success"
+                        : p.status === "in-progress"
+                        ? "badge-primary"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {p.status.replace("-", " ")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="card bg-base-100 shadow p-4">
+            <h3 className="text-lg font-semibold mb-3">Projects Status</h3>
+            <Pie data={projectChartData} />
+          </div>
         </div>
       </main>
     </div>
