@@ -1,3 +1,4 @@
+//createProject.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +28,7 @@ const CreateProject = () => {
       }
 
       const res = await fetch(
-        "https://projectmanegerbackend-1.onrender.com/api/projects", // بهتره از متغیر محیطی استفاده کنیم
+        "https://projectmanegerbackend-1.onrender.com/api/projects",
         {
           method: "POST",
           headers: {
