@@ -21,13 +21,13 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
+        navigate("/");
         return;
       }
 
       const payload = parseJwt(token);
       if (!payload) {
-        navigate("/login");
+        navigate("/");
         return;
       }
 
@@ -64,7 +64,7 @@ const ProfilePage = () => {
 
     try {
       const updateData = { ...user };
-      if (newPassword) updateData.password = newPassword; // only send if provided
+      if (newPassword) updateData.password = newPassword;
 
       const res = await fetch(
         `https://projectmanegerbackend-1.onrender.com/api/users/${payload.id}`,
@@ -78,11 +78,22 @@ const ProfilePage = () => {
         }
       );
 
-      if (!res.ok) throw new Error("Failed to update profile");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Failed to update profile");
+      }
 
-      alert("Profile updated ✅");
+      const data = await res.json();
+
+      if (data.token) {
+        localStorage.setItem("token", data.token); // refresh after password change
+      }
+
+      setUser(data);
       setNewPassword("");
       setConfirmPassword("");
+      setError(null);
+      alert("Profile updated ✅");
     } catch (err) {
       setError(err.message);
     }
@@ -99,14 +110,14 @@ const ProfilePage = () => {
       <input
         type="text"
         value={user?.firstName || ""}
-        onChange={(e) => setUser({ ...user, name: e.target.value })}
+        onChange={(e) => setUser({ ...user, firstName: e.target.value })}
         className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-700"
       />
       {/* Update Name */}
       <input
         type="text"
         value={user?.lastName || ""}
-        onChange={(e) => setUser({ ...user, name: e.target.value })}
+        onChange={(e) => setUser({ ...user, lastName: e.target.value })}
         className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-700"
       />
 
