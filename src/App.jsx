@@ -10,6 +10,7 @@ import UsersPage from "./pages/usersPage";
 import Projects from "./pages/projects";
 import CreateProject from "./pages/createProject.jsx";
 import EditUserPage from "./pages/edit.jsx";
+import CreateTask from "./pages/createTask.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/createProject" element={<CreateProject />} />
         <Route path="/edit/:id" element={<EditUserPage />} />
+        <Route path="/createTask" element={<CreateTask />} />
       </Route>
     </Routes>
   );
