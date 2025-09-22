@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
@@ -13,18 +13,59 @@ const CreateTask = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const navigate = useNavigate();
 
-  // فرض بر اینه که پروژه‌ها و کاربران رو جداگانه از API بگیری و گزینه‌ها رو تو state ذخیره کنی
-  // برای ساده بودن اینجا آرایه های ثابت استفاده کردم
-  const projects = [
-    { _id: "64f0c123456789abcdef1234", name: "Project A" },
-    { _id: "64f0c123456789abcdef5678", name: "Project B" },
-  ];
-  const users = [
-    { _id: "64f0d123456789abcdef4321", name: "Ali Reza" },
-    { _id: "64f0d123456789abcdef8765", name: "Sara Ahmadi" },
-  ];
+  // گرفتن پروژه‌ها و کاربران از API
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const fetchProjects = async () => {
+      setLoadingProjects(true);
+      try {
+        const res = await fetch(
+          "https://projectmanegerbackend-1.onrender.com/api/projects",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load projects");
+        setProjects(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingProjects(false);
+      }
+    };
+
+    const fetchUsers = async () => {
+      setLoadingUsers(true);
+      try {
+        const res = await fetch(
+          "https://projectmanegerbackend-1.onrender.com/api/users",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load users");
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchProjects();
+    fetchUsers();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +77,7 @@ const CreateTask = () => {
       if (!token) {
         alert("Please log in first");
         navigate("/login");
+        setLoading(false);
         return;
       }
 
@@ -63,14 +105,11 @@ const CreateTask = () => {
       const data = await res.json();
 
       if (!res.ok) {
-
         throw new Error(data.message || "Failed to create task");
-
-
       }
 
       alert("Task created successfully ✅");
-      navigate("/tasks");
+      navigate("/taskPage");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -90,26 +129,71 @@ const CreateTask = () => {
 
         <input
           type="text"
-
-          placeholder="Project Name"
-          className="border p-2  text-gray-300 bg-amber-50 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-
+          placeholder="Task Title"
+          className="border p-2 rounded"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
 
         <textarea
           placeholder="Description"
-          className="border p-2 rounded  text-gray-300 bg-amber-50"
+          className="border p-2 rounded"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
         <select
+          className="border p-2 rounded"
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+          required
+        >
+          <option value="">-- Select Project --</option>
+          {loadingProjects ? (
+            <option disabled>Loading projects...</option>
+          ) : (
+            projects.map((proj) => (
+              <option key={proj._id} value={proj._id}>
+                {proj.name}
+              </option>
+            ))
+          )}
+        </select>
 
-          className="border p-2 rounded  text-gray-300 bg-amber-50"
+        <select
+          className="border p-2 rounded"
+          value={assignedTo}
+          onChange={(e) => setAssignedTo(e.target.value)}
+        >
+          <option value="">-- Assign To (optional) --</option>
+          {loadingUsers ? (
+            <option disabled>Loading users...</option>
+          ) : (
+            users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.name}
+              </option>
+            ))
+          )}
+        </select>
 
+        <select
+          className="border p-2 rounded"
+          value={types}
+          onChange={(e) => setTypes(e.target.value)}
+          required
+        >
+          <option value="">-- Select Type --</option>
+          <option value="Support">Support</option>
+          <option value="Training">Training</option>
+          <option value="Monitoring">Monitoring</option>
+          <option value="Production">Production</option>
+          <option value="R&D">R&D</option>
+        </select>
+
+        <select
+          className="border p-2 rounded"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           required
