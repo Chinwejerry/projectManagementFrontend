@@ -35,7 +35,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(data));
 
       // redirect to dashboard or users page
-      window.location.href = "/projects";
+      window.location.href = "/adminDashboard";
     } catch (err) {
       setError(err.message);
     } finally {

@@ -9,18 +9,22 @@ import {
   Home,
   Folder,
   Users,
+  ClipboardList,
   Settings,
   Search,
-  ClipboardList,
   UserCircle,
+  Menu,
+  X,
 } from "lucide-react";
+
 import { Link } from "react-router";
 
-const AdminDashboardMain = () => {
+const AdminDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +62,7 @@ const AdminDashboardMain = () => {
     pending: 0,
     "in-progress": 0,
     completed: 0,
+    backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
   };
   projects.forEach((p) => projectStatusCounts[p.status]++);
 
@@ -65,6 +70,7 @@ const AdminDashboardMain = () => {
     pending: 0,
     "in-progress": 0,
     completed: 0,
+    backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
   };
   tasks.forEach((t) => taskStatusCounts[t.status]++);
 
@@ -77,7 +83,7 @@ const AdminDashboardMain = () => {
           projectStatusCounts["in-progress"],
           projectStatusCounts.completed,
         ],
-        backgroundColor: ["#FFCE56", "#36A2EB", "#4BC0C0"],
+        backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
       },
     ],
   };
@@ -91,7 +97,7 @@ const AdminDashboardMain = () => {
           taskStatusCounts["in-progress"],
           taskStatusCounts.completed,
         ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
       },
     ],
   };
@@ -99,26 +105,23 @@ const AdminDashboardMain = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      {/* Navbar */}
-      <header className="flex justify-between items-center text-black bg-white shadow px-4 py-2">
-        <div className="flex items-center gap-2 bg-gray-100  px-2 rounded">
-          <Search size={18} className="text-gray-500" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-transparent outline-none p-1"
-          />
-        </div>
-        <Link to="/profilePage" className="flex items-center gap-2">
-          <UserCircle size={32} className="text-gray-600" />
-          <span className="font-medium">Admin</span>
-        </Link>
-      </header>
+    <div className="flex h-screen bg-gray-100 text-cyan-50">
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-base-200 p-4">
-        <h1 className="text-2xl font-bold mb-6">PM Admin</h1>
-        <nav className="flex flex-col space-y-2">
+      <aside
+        className={`fixed md:static inset-y-0 left-0 transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 transition-transform duration-300 ease-in-out 
+        w-64 bg-slate-600 p-4 z-50`}
+      >
+        <div className="flex justify-between items-center mb-6 md:hidden">
+          <h1 className="text-2xl font-bold">Admin</h1>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
+        </div>
+
+        <h1 className="hidden md:block text-2xl font-bold mb-6"> Admin</h1>
+        <nav className="flex flex-col space-y-2 )">
           <Link
             to="/adminDashboard"
             className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
@@ -151,67 +154,107 @@ const AdminDashboardMain = () => {
           </Link>
         </nav>
       </aside>
-      {/* Total statistics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold">Total Projects</h3>
-          <p className="text-2xl font-bold">{projects.length}</p>
-        </div>
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold">Total Tasks</h3>
-          <p className="text-2xl font-bold">{tasks.length}</p>
-        </div>
-      </div>
-      {/* List of projects + chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="card bg-base-100 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-3">Projects</h3>
-          <ul className="divide-y">
-            {projects.map((p) => (
-              <li key={p._id} className="py-2 flex justify-between">
-                <span>{p.name}</span>
-                <span
-                  className={`badge ${
-                    p.status === "completed" ? "badge-success" : "badge-warning"
-                  }`}
-                >
-                  {p.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold mb-3">Project Status</h3>
-          <Pie data={projectChartData} />
-        </div>
-      </div>
-      {/* Task list + chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="card bg-base-100 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-3">Tasks</h3>
-          <ul className="divide-y">
-            {tasks.map((t) => (
-              <li key={t._id} className="py-2 flex justify-between">
-                <span>{t.title}</span>
-                <span
-                  className={`badge ${
-                    t.status === "completed" ? "badge-success" : "badge-warning"
-                  }`}
-                >
-                  {t.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="card bg-base-100 shadow p-4">
-          <h3 className="text-lg font-semibold mb-3">Task Status</h3>
-          <Pie data={taskChartData} />
-        </div>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Navbar */}
+        <header className="flex justify-between items-center  shadow px-4 py-2">
+          <div className="flex items-center gap-2 bg-slate-600 px-2 rounded">
+            <Search size={18} className="text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="bg-transparent outline-none p-1"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Toggle button (only mobile) */}
+            <button
+              className="md:hidden p-2"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+
+            <Link to="/profilePage" className="flex items-center gap-2">
+              <UserCircle size={32} className="text-gray-600" />
+              <span className="font-medium text-slate-600">Admin</span>
+            </Link>
+          </div>
+        </header>
+
+        {/* Page content */}
+        <main className="flex-1 p-6 space-y-6 overflow-y-auto">
+          {/* Total statistics */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold">Total Projects</h3>
+              <p className="text-2xl font-bold">{projects.length}</p>
+            </div>
+            <div className="card  bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold">Total Tasks</h3>
+              <p className="text-2xl font-bold">{tasks.length}</p>
+            </div>
+          </div>
+
+          {/* Projects + chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="card bg-slate-600 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-3">Projects</h3>
+              <ul className="divide-y">
+                {projects.map((p) => (
+                  <li key={p._id} className="py-2 flex justify-between">
+                    <span>{p.name}</span>
+                    <span
+                      className={`badge ${
+                        p.status === "completed"
+                          ? "badge-success"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold mb-3">Project Status</h3>
+              <Pie data={projectChartData} />
+            </div>
+          </div>
+
+          {/* Tasks + chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="card bg-slate-600 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-3">Tasks</h3>
+              <ul className="divide-y">
+                {tasks.map((t) => (
+                  <li key={t._id} className="py-2 flex justify-between">
+                    <span>{t.title}</span>
+                    <span
+                      className={`badge ${
+                        t.status === "completed"
+                          ? "badge-success"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {t.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold mb-3">Task Status</h3>
+              <Pie data={taskChartData} />
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );
 };
 
-export default AdminDashboardMain;
+export default AdminDashboard;
