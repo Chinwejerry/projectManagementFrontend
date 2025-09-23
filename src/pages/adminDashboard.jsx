@@ -1,4 +1,3 @@
-
 //adminDashboard.jsx
 
 import { useState, useEffect } from "react";
@@ -6,6 +5,16 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+import {
+  Home,
+  Folder,
+  Users,
+  Settings,
+  Search,
+  ClipboardList,
+  UserCircle,
+} from "lucide-react";
+import { Link } from "react-router";
 
 const AdminDashboardMain = () => {
   const [projects, setProjects] = useState([]);
@@ -16,7 +25,6 @@ const AdminDashboardMain = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const projectRes = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/projects",
           {
@@ -46,7 +54,6 @@ const AdminDashboardMain = () => {
     fetchData();
   }, [token]);
 
-  // محاسبه وضعیت پروژه‌ها
   const projectStatusCounts = {
     pending: 0,
     "in-progress": 0,
@@ -92,8 +99,59 @@ const AdminDashboardMain = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <main className="p-4 space-y-6 overflow-y-auto">
-      {/* آمار کل */}
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Navbar */}
+      <header className="flex justify-between items-center text-black bg-white shadow px-4 py-2">
+        <div className="flex items-center gap-2 bg-gray-100  px-2 rounded">
+          <Search size={18} className="text-gray-500" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="bg-transparent outline-none p-1"
+          />
+        </div>
+        <Link to="/profilePage" className="flex items-center gap-2">
+          <UserCircle size={32} className="text-gray-600" />
+          <span className="font-medium">Admin</span>
+        </Link>
+      </header>
+      {/* Sidebar */}
+      <aside className="hidden md:flex flex-col w-64 bg-base-200 p-4">
+        <h1 className="text-2xl font-bold mb-6">PM Admin</h1>
+        <nav className="flex flex-col space-y-2">
+          <Link
+            to="/adminDashboard"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Home size={18} /> Dashboard
+          </Link>
+          <Link
+            to="/projects"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Folder size={18} /> Projects
+          </Link>
+          <Link
+            to="/usersPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Users size={18} /> Users
+          </Link>
+          <Link
+            to="/taskPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <ClipboardList size={18} /> Tasks
+          </Link>
+          <Link
+            to="#"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Settings size={18} /> Settings
+          </Link>
+        </nav>
+      </aside>
+      {/* Total statistics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="card bg-base-100 shadow p-4">
           <h3 className="text-lg font-semibold">Total Projects</h3>
@@ -104,8 +162,7 @@ const AdminDashboardMain = () => {
           <p className="text-2xl font-bold">{tasks.length}</p>
         </div>
       </div>
-
-      {/* لیست پروژه‌ها + نمودار */}
+      {/* List of projects + chart */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card bg-base-100 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
           <h3 className="text-lg font-semibold mb-3">Projects</h3>
@@ -129,8 +186,7 @@ const AdminDashboardMain = () => {
           <Pie data={projectChartData} />
         </div>
       </div>
-
-      {/* لیست تسک‌ها + نمودار */}
+      {/* Task list + chart */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card bg-base-100 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
           <h3 className="text-lg font-semibold mb-3">Tasks</h3>
@@ -154,7 +210,7 @@ const AdminDashboardMain = () => {
           <Pie data={taskChartData} />
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 
