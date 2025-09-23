@@ -1,3 +1,4 @@
+//taskPage.jsx
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +12,7 @@ const TaskPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
+  // 📌 دریافت تسک‌ها
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -18,9 +20,7 @@ const TaskPage = () => {
         const res = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/tasks",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -40,6 +40,7 @@ const TaskPage = () => {
     fetchTasks();
   }, []);
 
+  // 📌 فیلتر تسک‌ها بر اساس جستجو
   const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -49,6 +50,7 @@ const TaskPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Navbar */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white shadow px-4 py-3 gap-3">
         <h1 className="text-2xl font-bold">Tasks</h1>
 
@@ -63,6 +65,7 @@ const TaskPage = () => {
           />
         </div>
 
+        {/* دکمه اضافه کردن تسک برای ادمین */}
         {user?.role === "admin" && (
           <button
             className="btn btn-primary ml-4"
@@ -73,6 +76,7 @@ const TaskPage = () => {
         )}
       </header>
 
+      {/* Main content */}
       <main className="p-4 flex-1 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTasks.length === 0 && (
@@ -82,7 +86,8 @@ const TaskPage = () => {
           {filteredTasks.map((task) => (
             <div
               key={task._id}
-              className="card bg-base-100 shadow p-4 flex flex-col justify-between"
+              className="card bg-base-100 shadow p-4 flex flex-col justify-between cursor-pointer hover:bg-gray-50"
+              onClick={() => navigate(`/taskDetail/${task._id}`)}
             >
               <div className="flex justify-between items-start mb-3">
                 <h2 className="font-semibold text-lg">{task.title}</h2>
