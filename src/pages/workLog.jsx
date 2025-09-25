@@ -1,108 +1,101 @@
+// worklog.jsx
+
 import React, { useState } from "react";
-import { Calendar, Search, Plus, Edit, Trash2 } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 
-const initialWorklogs = [
-  {
-    id: 1,
-    date: "2025-09-18",
-    project: "Website Redesign",
-    task: "Homepage Design",
-    hours: 4,
-  },
-  {
-    id: 2,
-    date: "2025-09-18",
-    project: "Mobile App",
-    task: "Login Flow",
-    hours: 3,
-  },
-  {
-    id: 3,
-    date: "2025-09-17",
-    project: "Marketing Campaign",
-    task: "Social Media Ads",
-    hours: 2,
-  },
-];
+const WorklogForm = () => {
+  const { taskId } = useParams();
+  const navigate = useNavigate();
+  const [comment, setComment] = useState("");
+  const [spentTime, setSpentTime] = useState("");
+  const [statusChange, setStatusChange] = useState("");
+  const [file, setFile] = useState(null);
 
-const Worklog = () => {
-  const [worklogs, setWorklogs] = useState(initialWorklogs);
-  const [search, setSearch] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
 
-  const filteredWorklogs = worklogs.filter(
-    (w) =>
-      w.project.toLowerCase().includes(search.toLowerCase()) ||
-      w.task.toLowerCase().includes(search.toLowerCase())
-  );
+      // همه داده‌ها + فایل در یک FormData
+      const formData = new FormData();
+      formData.append("taskId", taskId);
+      formData.append("comment", comment);
+      formData.append("spentTime", spentTime);
+      if (statusChange) formData.append("statusChange", statusChange);
+      if (file) formData.append("file", file);
+
+      const res = await fetch(
+        "https://projectmanegerbackend-1.onrender.com/api/worklogs",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // ⬅️ اینو نگه داریم
+          },
+          body: formData,
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to add worklog");
+      await res.json();
+
+      // بعد از ثبت موفق، برو به task detail
+      navigate(`/taskDetail/${taskId}`);
+    } catch (err) {
+      console.error("❌ Error submitting worklog:", err);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Page Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-center bg-white shadow px-4 py-3 gap-3">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Calendar size={24} /> Worklog
-        </h1>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center bg-gray-100 px-2 rounded w-full">
-            <Search size={18} className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search project or task..."
-              className="bg-transparent outline-none p-1 w-full"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <button className="btn btn-primary flex items-center gap-2">
-            <Plus size={16} /> Add Entry
-          </button>
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Add Worklog</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label>Comment:</label>
+          <input
+            type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
         </div>
-      </header>
-
-      {/* Worklog Table */}
-      <main className="p-4 flex-1 overflow-y-auto">
-        <div className="overflow-x-auto">
-          <table className="table w-full bg-base-100 shadow rounded">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Project</th>
-                <th>Task</th>
-                <th>Hours</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredWorklogs.map((log) => (
-                <tr key={log.id}>
-                  <td>{log.date}</td>
-                  <td>{log.project}</td>
-                  <td>{log.task}</td>
-                  <td>{log.hours}</td>
-                  <td className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
-                      <Edit size={14} /> Edit
-                    </button>
-                    <button className="btn btn-sm btn-outline btn-error flex items-center gap-1">
-                      <Trash2 size={14} /> Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredWorklogs.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="text-center py-4">
-                    No worklog entries found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div>
+          <label>Spent Time (h):</label>
+          <input
+            type="number"
+            value={spentTime}
+            onChange={(e) => setSpentTime(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
         </div>
-      </main>
+        <div>
+          <label>Status Change:</label>
+          <select
+            value={statusChange}
+            onChange={(e) => setStatusChange(e.target.value)}
+            className="border p-2 w-full"
+          >
+            <option value="">Select Status (optional)</option>
+            <option value="pending">pending</option>
+            <option value="in-progress">in-progress</option>
+            <option value="completed">completed</option>
+          </select>
+        </div>
+        <div>
+          <label>Attachment (optional):</label>
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="border p-2 w-full"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary w-full">
+          Submit Worklog
+        </button>
+      </form>
     </div>
   );
 };
 
-export default Worklog;
+export default WorklogForm;

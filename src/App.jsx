@@ -1,10 +1,11 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/mainLayout";
+
 import AdminDashboard from "./pages/adminDashboard";
 import UserDashboard from "./pages/userDashboard";
 import TaskPage from "./pages/taskPage";
 import TaskDetail from "./pages/taskDetail";
-import WorkLog from "./pages/workLog";
+import WorklogForm from "./pages/workLog"; 
 import Login from "./pages/login";
 import CreateUser from "./pages/createUser";
 import UsersPage from "./pages/usersPage";
@@ -40,7 +41,7 @@ function App() {
       <Route element={<MainLayout />}>
         {/* Login as index */}
         <Route index element={<Login />} />
-
+          
         {/* USER ROUTES */}
         <Route
           path="/userDashboard"
@@ -65,9 +66,10 @@ function App() {
               <TaskDetail />
             </ProtectedRoute>
           }
+
         />
         <Route
-          path="/workLog"
+          path="//tasks/:taskId/worklog"
           element={
             <ProtectedRoute role="user">
               <WorkLog />
@@ -142,6 +144,7 @@ function App() {
         />
 
         {/* 404 fallback */}
+
         <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
     </Routes>
