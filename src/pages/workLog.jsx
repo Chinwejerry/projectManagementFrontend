@@ -1,9 +1,10 @@
-// WorklogForm.jsx
+// worklog.jsx
+
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const WorklogForm = () => {
-  const { taskId } = useParams(); // taskId از route
+  const { taskId } = useParams();
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const [spentTime, setSpentTime] = useState("");
@@ -15,39 +16,29 @@ const WorklogForm = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // ثبت Worklog
-      const body = { taskId, comment, spentTime, statusChange };
-      const res = await fetch("http://localhost:5000/api/worklogs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
-      });
+      // همه داده‌ها + فایل در یک FormData
+      const formData = new FormData();
+      formData.append("taskId", taskId);
+      formData.append("comment", comment);
+      formData.append("spentTime", spentTime);
+      if (statusChange) formData.append("statusChange", statusChange);
+      if (file) formData.append("file", file);
+
+      const res = await fetch(
+        "https://projectmanegerbackend-1.onrender.com/api/worklogs",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // ⬅️ اینو نگه داریم
+          },
+          body: formData,
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to add worklog");
-      const newWorklog = await res.json();
+      await res.json();
 
-      // آپلود فایل در صورت وجود
-      if (file) {
-        const formData = new FormData();
-        formData.append("worklogId", newWorklog._id);
-        formData.append("file", file);
-
-        const fileRes = await fetch(
-          "http://localhost:5000/api/attachments/upload",
-          {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData,
-          }
-        );
-
-        if (!fileRes.ok) throw new Error("Failed to upload attachment");
-      }
-
-      // بازگشت به TaskDetail بعد از ثبت
+      // بعد از ثبت موفق، برو به task detail
       navigate(`/taskDetail/${taskId}`);
     } catch (err) {
       console.error("❌ Error submitting worklog:", err);
@@ -84,9 +75,8 @@ const WorklogForm = () => {
             value={statusChange}
             onChange={(e) => setStatusChange(e.target.value)}
             className="border p-2 w-full"
-            required
           >
-            <option value="">Select Status</option>
+            <option value="">Select Status (optional)</option>
             <option value="pending">pending</option>
             <option value="in-progress">in-progress</option>
             <option value="completed">completed</option>
