@@ -1,11 +1,13 @@
 //َApp.jsx
-import { Routes, Route, Outlet } from "react-router";
+import { Routes, Route } from "react-router";
 import MainLayout from "./layouts/mainLayout";
+
+// Pages
 import AdminDashboard from "./pages/adminDashboard";
 import UserDashboard from "./pages/userDashboard";
 import TaskPage from "./pages/taskPage";
-import TaskDetail from "./pages/taskDetail"; // اضافه شد
-import WorkLog from "./pages/workLog";
+import TaskDetail from "./pages/taskDetail";
+import WorklogForm from "./pages/workLog"; // فرم ثبت Worklog
 import Login from "./pages/login";
 import CreateUser from "./pages/createUser";
 import UsersPage from "./pages/usersPage";
@@ -20,10 +22,13 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<Login />} />
+
         <Route path="/userDashboard" element={<UserDashboard />} />
         <Route path="/taskPage" element={<TaskPage />} />
         <Route path="/taskDetail/:id" element={<TaskDetail />} />
-        <Route path="/workLog" element={<WorkLog />} />
+
+        {/* فرم ثبت Worklog برای هر تسک */}
+        <Route path="/tasks/:taskId/worklog" element={<WorklogForm />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/createUser" element={<CreateUser />} />
         <Route path="/usersPage" element={<UsersPage />} />
@@ -32,6 +37,7 @@ function App() {
         <Route path="/createProject" element={<CreateProject />} />
         <Route path="/edit/:id" element={<EditUserPage />} />
         <Route path="/createTask" element={<CreateTask />} />
+
         <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
     </Routes>
