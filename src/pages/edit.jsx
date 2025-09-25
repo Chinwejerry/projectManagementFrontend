@@ -80,7 +80,7 @@ const EditUserPage = () => {
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <div className="bg-black p-6 rounded-2xl shadow w-full max-w-lg">
         <h1 className="text-2xl font-bold mb-4">Edit User</h1>
 

@@ -83,7 +83,7 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[url(images/1.png)]  bg-no-repeat bg-center bg-cover ">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Page Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-transparent shadow px-4 py-3 gap-3">
         <Link

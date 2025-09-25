@@ -1,4 +1,3 @@
-//createProject.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -48,7 +47,6 @@ const CreateProject = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        // نمایش پیام واقعی سرور
         throw new Error(data.message || "Failed to create project");
       }
 
@@ -63,7 +61,7 @@ const CreateProject = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
         className="bg-black shadow rounded-lg p-6 w-96 flex flex-col gap-4"

@@ -59,10 +59,10 @@ const CreateUser = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
+    <div className="flex justify-center bg-gray-100 items-center min-h-screen  p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-black shadow rounded-lg p-6 w-80 flex flex-col gap-4"
+        className="bg-black text-black shadow rounded-lg p-6 w-80 flex flex-col gap-4"
       >
         <h1 className="text-xl font-bold">Create New User</h1>
 
@@ -71,7 +71,7 @@ const CreateUser = () => {
         <input
           type="text"
           placeholder="First Name"
-          className="border p-2 rounded text-gray-300 bg-amber-50"
+          className="border p-2 rounded  bg-amber-50"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
@@ -79,7 +79,7 @@ const CreateUser = () => {
         <input
           type="text"
           placeholder="Last Name"
-          className="border p-2 rounded text-gray-300 bg-amber-50"
+          className="border p-2 rounded  bg-amber-50"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           required
@@ -88,7 +88,7 @@ const CreateUser = () => {
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 rounded text-gray-300 bg-amber-50"
+          className="border p-2 rounded  bg-amber-50"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -97,14 +97,14 @@ const CreateUser = () => {
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 rounded text-gray-300 bg-amber-50"
+          className="border p-2 rounded  bg-amber-50"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
         <select
-          className="border p-2 rounded text-gray-300 bg-amber-50"
+          className="border p-2 rounded  bg-amber-50"
           value={role}
           onChange={(e) => setRole(e.target.value)}
         >

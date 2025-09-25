@@ -1,6 +1,18 @@
 //userDashboard.jsx
 import { useState, useEffect } from "react";
-import { Search, UserCircle } from "lucide-react";
+import { Link } from "react-router";
+import SearchBar from "../components/search";
+import {
+  Home,
+  Folder,
+  Users,
+  ClipboardList,
+  Settings,
+  Search,
+  UserCircle,
+  Menu,
+  X,
+} from "lucide-react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -10,6 +22,25 @@ const UserDashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [results, setResults] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleSearch = async ({ query, filter }) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+
+    // Example: call your API with query + filter
+    const res = await fetch(
+      `https://projectmanegerbackend-1.onrender.com/api/data?${filter}=${query}`
+    );
+    const data = await res.json();
+
+    setSuggestions(data); // pass live suggestions
+    setResults(data); // pass final results
+  };
 
   const token = localStorage.getItem("token");
 
@@ -46,7 +77,6 @@ const UserDashboard = () => {
 
   if (loading) return <p>Loading...</p>;
 
-  // آماده‌سازی داده برای نمودار Pie تسک‌ها
   const taskStatusCounts = {
     pending: 0,
     "in-progress": 0,
@@ -70,7 +100,6 @@ const UserDashboard = () => {
     ],
   };
 
-  // آماده‌سازی داده برای نمودار Pie پروژه‌ها
   const projectStatusCounts = {
     pending: 0,
     "in-progress": 0,
@@ -96,83 +125,160 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Navbar */}
-      <header className="flex justify-between items-center bg-white shadow px-4 py-2">
-        <div className="flex items-center gap-2 bg-gray-100 px-2 rounded">
-          <Search size={18} className="text-gray-500" />
-          <input
-            type="text"
-            placeholder="Search tasks or projects..."
-            className="bg-transparent outline-none p-1"
-          />
+    <div className="flex h-screen bg-gray-100 text-cyan-50">
+      {/* Sidebar */}
+      <aside
+        className={`fixed md:static inset-y-0 left-0 transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 transition-transform duration-300 ease-in-out 
+        w-64 bg-slate-600 p-4 z-50`}
+      >
+        <div className="flex justify-between items-center mb-6 md:hidden">
+          <h1 className="text-2xl font-bold">User</h1>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
-        <div className="flex items-center gap-2">
-          <UserCircle size={32} className="text-gray-600" />
-          <span className="font-medium text-black">uuu</span>
-        </div>
-      </header>
+
+        <h1 className="hidden md:block text-2xl font-bold mb-6"> User</h1>
+        <nav className="flex flex-col space-y-2 )">
+          <Link
+            to="/userDashboard"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Home size={18} /> Dashboard
+          </Link>
+          <Link
+            to="/projects"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Folder size={18} /> Projects
+          </Link>
+          <Link
+            to="/usersPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Users size={18} /> Users
+          </Link>
+          <Link
+            to="/taskPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <ClipboardList size={18} /> Tasks
+          </Link>
+          <Link
+            to="#"
+            className="flex items-center gap-2 p-2 rounded hover:bg-base-300"
+          >
+            <Settings size={18} /> Settings
+          </Link>
+        </nav>
+      </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-4 space-y-6 overflow-y-auto">
-        {/* Tasks Section */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <div className="card bg-base-100 shadow p-4 max-h-96 overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-3">My Tasks</h3>
-            <ul className="divide-y">
-              {tasks.map((t) => (
-                <li key={t._id} className="py-2 flex justify-between">
-                  <span>{t.title}</span>
-                  <span
-                    className={`badge ${
-                      t.status === "completed"
-                        ? "badge-success"
-                        : t.status === "in-progress"
-                        ? "badge-primary"
-                        : "badge-warning"
-                    }`}
-                  >
-                    {t.status.replace("-", " ")}
-                  </span>
-                </li>
-              ))}
-            </ul>
+      <div className="flex-1 flex flex-col">
+        {/* Navbar */}
+        <header className="flex justify-between items-center  shadow px-4 py-2">
+          <SearchBar onSearch={handleSearch} suggestions={suggestions} />
+          <div className="mt-6">
+            {/* {results.length === 0 ? (
+              <p>No results yet.</p>
+            ) : (
+              <ul className="space-y-2">
+                {results.map((item) => (
+                  <li key={item.id} className="p-2 border rounded-xl">
+                    {item.name} – {item.category}
+                  </li>
+                ))}
+              </ul>
+            )} */}
           </div>
-          <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-semibold mb-3">Tasks Status</h3>
-            <Pie data={taskChartData} />
-          </div>
-        </div>
 
-        {/* Projects Section */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <div className="card bg-base-100 shadow p-4 max-h-96 overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-3">Projects Overview</h3>
-            <ul className="divide-y">
-              {projects.map((p) => (
-                <li key={p._id} className="py-2 flex justify-between">
-                  <span>{p.name}</span>
-                  <span
-                    className={`badge ${
-                      p.status === "completed"
-                        ? "badge-success"
-                        : p.status === "in-progress"
-                        ? "badge-primary"
-                        : "badge-warning"
-                    }`}
-                  >
-                    {p.status.replace("-", " ")}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          <div className="flex items-center gap-2">
+            {/* Toggle button (only mobile) */}
+            <button
+              className="md:hidden p-2"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+
+            <Link to="/profilePage" className="flex items-center gap-2">
+              <UserCircle size={32} className="text-gray-600" />
+              <span className="font-medium text-slate-600">User</span>
+            </Link>
           </div>
-          <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-semibold mb-3">Projects Status</h3>
-            <Pie data={projectChartData} />
+        </header>
+
+        {/* Page content */}
+        <main className="flex-1 p-6 space-y-6 overflow-y-auto">
+          {/* Total statistics */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold">Total Projects</h3>
+              <p className="text-2xl font-bold">{projects.length}</p>
+            </div>
+            <div className="card  bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold">Total Tasks</h3>
+              <p className="text-2xl font-bold">{tasks.length}</p>
+            </div>
           </div>
-        </div>
-      </main>
+
+          {/* Projects + chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="card bg-slate-600 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-3">Projects</h3>
+              <ul className="divide-y">
+                {projects.map((p) => (
+                  <li key={p._id} className="py-2 flex justify-between">
+                    <span>{p.name}</span>
+                    <span
+                      className={`badge ${
+                        p.status === "completed"
+                          ? "badge-success"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold mb-3">Project Status</h3>
+              <Pie data={projectChartData} />
+            </div>
+          </div>
+
+          {/* Tasks + chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="card bg-slate-600 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-3">Tasks</h3>
+              <ul className="divide-y">
+                {tasks.map((t) => (
+                  <li key={t._id} className="py-2 flex justify-between">
+                    <span>{t.title}</span>
+                    <span
+                      className={`badge ${
+                        t.status === "completed"
+                          ? "badge-success"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {t.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card bg-slate-600 shadow p-4">
+              <h3 className="text-lg font-semibold mb-3">Task Status</h3>
+              <Pie data={taskChartData} />
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

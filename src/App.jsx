@@ -1,13 +1,11 @@
-//َApp.jsx
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/mainLayout";
 
-// Pages
 import AdminDashboard from "./pages/adminDashboard";
 import UserDashboard from "./pages/userDashboard";
 import TaskPage from "./pages/taskPage";
 import TaskDetail from "./pages/taskDetail";
-import WorklogForm from "./pages/workLog"; // فرم ثبت Worklog
+import WorklogForm from "./pages/workLog"; 
 import Login from "./pages/login";
 import CreateUser from "./pages/createUser";
 import UsersPage from "./pages/usersPage";
@@ -16,27 +14,136 @@ import CreateProject from "./pages/createProject.jsx";
 import EditUserPage from "./pages/edit.jsx";
 import CreateTask from "./pages/createTask.jsx";
 import ProfilePage from "./pages/profilePage";
+//import { useAuth } from "./contexts/AuthContext";
+
+function ProtectedRoute({ children, role }) {
+  // read from localStorage
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
+
+  // 1️⃣ check if logged in
+  if (!token) {
+    return <Navigate to="/" replace />;
+  }
+
+  // 2️⃣ check role if specified
+  if (role && userRole !== role) {
+    return <Navigate to="/" replace />;
+  }
+
+  // 3️⃣ all good, show the page
+  return children;
+}
 
 function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
+        {/* Login as index */}
         <Route index element={<Login />} />
+          
+        {/* USER ROUTES */}
+        <Route
+          path="/userDashboard"
+          element={
+            <ProtectedRoute role="user">
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/taskPage"
+          element={
+            <ProtectedRoute>
+              <TaskPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/taskDetail/:id"
+          element={
+            <ProtectedRoute role="user">
+              <TaskDetail />
+            </ProtectedRoute>
+          }
 
-        <Route path="/userDashboard" element={<UserDashboard />} />
-        <Route path="/taskPage" element={<TaskPage />} />
-        <Route path="/taskDetail/:id" element={<TaskDetail />} />
+        />
+        <Route
+          path="//tasks/:taskId/worklog"
+          element={
+            <ProtectedRoute role="user">
+              <WorkLog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profilePage"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* فرم ثبت Worklog برای هر تسک */}
-        <Route path="/tasks/:taskId/worklog" element={<WorklogForm />} />
-        <Route path="/adminDashboard" element={<AdminDashboard />} />
-        <Route path="/createUser" element={<CreateUser />} />
-        <Route path="/usersPage" element={<UsersPage />} />
-        <Route path="/profilePage" element={<ProfilePage />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/createProject" element={<CreateProject />} />
-        <Route path="/edit/:id" element={<EditUserPage />} />
-        <Route path="/createTask" element={<CreateTask />} />
+        {/* ADMIN ROUTES */}
+        <Route
+          path="/adminDashboard"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createUser"
+          element={
+            <ProtectedRoute role="admin">
+              <CreateUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usersPage"
+          element={
+            <ProtectedRoute role="admin">
+              <UsersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createProject"
+          element={
+            <ProtectedRoute role="admin">
+              <CreateProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit/:id"
+          element={
+            <ProtectedRoute role="admin">
+              <EditUserPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createTask"
+          element={
+            <ProtectedRoute role="admin">
+              <CreateTask />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 fallback */}
 
         <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
