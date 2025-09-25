@@ -1,5 +1,3 @@
-// worklog.jsx
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -16,7 +14,6 @@ const WorklogForm = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // همه داده‌ها + فایل در یک FormData
       const formData = new FormData();
       formData.append("taskId", taskId);
       formData.append("comment", comment);
@@ -38,7 +35,6 @@ const WorklogForm = () => {
       if (!res.ok) throw new Error("Failed to add worklog");
       await res.json();
 
-      // بعد از ثبت موفق، برو به task detail
       navigate(`/taskDetail/${taskId}`);
     } catch (err) {
       console.error("❌ Error submitting worklog:", err);
