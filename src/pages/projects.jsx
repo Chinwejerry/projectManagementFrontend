@@ -6,8 +6,8 @@ import axios from "axios";
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  // گرفتن لیست پروژه‌ها از بکند
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -29,7 +29,6 @@ const Projects = () => {
     fetchProjects();
   }, []);
 
-  // فیلتر کردن پروژه‌ها با سرچ
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -58,14 +57,14 @@ const Projects = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-
-          {/* دکمه رفتن به createProject */}
-          <Link
-            to="/createProject"
-            className="btn btn-primary flex items-center gap-2"
-          >
-            <Plus size={16} /> Add Project
-          </Link>
+          {user?.role === "admin" && (
+            <Link
+              to="/createProject"
+              className="btn btn-primary flex items-center gap-2"
+            >
+              <Plus size={16} /> Add Project
+            </Link>
+          )}
         </div>
       </header>
 

@@ -20,7 +20,6 @@ const CreateTask = () => {
 
   const navigate = useNavigate();
 
-  // گرفتن پروژه‌ها و کاربران از API
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -118,7 +117,7 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
         className="bg-black shadow rounded-lg p-6 w-96 flex flex-col gap-4"
@@ -162,7 +161,7 @@ const CreateTask = () => {
         </select>
 
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded "
           value={assignedTo}
           onChange={(e) => setAssignedTo(e.target.value)}
         >
@@ -171,8 +170,8 @@ const CreateTask = () => {
             <option disabled>Loading users...</option>
           ) : (
             users.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.name}
+              <option className="text-amber-50" key={user._id} value={user._id}>
+                {user.firstName}
               </option>
             ))
           )}

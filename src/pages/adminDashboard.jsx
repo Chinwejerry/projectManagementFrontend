@@ -1,6 +1,5 @@
-//adminDashboard.jsx
-
 import { useState, useEffect } from "react";
+import SearchBar from "../components/search";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -25,6 +24,24 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [results, setResults] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleSearch = async ({ query, filter }) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+
+    // Example: call your API with query + filter
+    const res = await fetch(
+      `https://projectmanegerbackend-1.onrender.com/api/data?${filter}=${query}`
+    );
+    const data = await res.json();
+
+    setSuggestions(data); // pass live suggestions
+    setResults(data); // pass final results
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,13 +176,19 @@ const AdminDashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="flex justify-between items-center  shadow px-4 py-2">
-          <div className="flex items-center gap-2 bg-slate-600 px-2 rounded">
-            <Search size={18} className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent outline-none p-1"
-            />
+          <SearchBar onSearch={handleSearch} suggestions={suggestions} />
+          <div className="mt-6">
+            {/* {results.length === 0 ? (
+              <p>No results yet.</p>
+            ) : (
+              <ul className="space-y-2">
+                {results.map((item) => (
+                  <li key={item.id} className="p-2 border rounded-xl">
+                    {item.name} – {item.category}
+                  </li>
+                ))}
+              </ul>
+            )} */}
           </div>
 
           <div className="flex items-center gap-2">

@@ -1,8 +1,7 @@
-//taskPage.jsx
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 const TaskPage = () => {
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
@@ -12,7 +11,6 @@ const TaskPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
-  // 📌 دریافت تسک‌ها
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -40,7 +38,6 @@ const TaskPage = () => {
     fetchTasks();
   }, []);
 
-  // 📌 فیلتر تسک‌ها بر اساس جستجو
   const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -65,14 +62,10 @@ const TaskPage = () => {
           />
         </div>
 
-        {/* دکمه اضافه کردن تسک برای ادمین */}
         {user?.role === "admin" && (
-          <button
-            className="btn btn-primary ml-4"
-            onClick={() => navigate("/createTask")}
-          >
+          <Link className="btn btn-primary ml-4" to="/createTask">
             Add Task
-          </button>
+          </Link>
         )}
       </header>
 

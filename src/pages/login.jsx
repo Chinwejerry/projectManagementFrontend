@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
@@ -6,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,10 +34,15 @@ const Login = () => {
 
       // save token (and maybe user info) in localStorage
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("role", data.role);
 
       // redirect to dashboard or users page
-      window.location.href = "/adminDashboard";
+
+      if (data.role === "admin") {
+        navigate("/adminDashboard"); // 👈 admin’s landing page
+      } else {
+        navigate("/userDashboard"); // 👈 regular user’s landing page
+      }
     } catch (err) {
       setError(err.message);
     } finally {
