@@ -1,26 +1,28 @@
 // taskDetail.jsx
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const TaskDetail = () => {
-  const { id } = useParams(); // taskId از route
+  const { id } = useParams(); // taskId
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [worklogs, setWorklogs] = useState([]);
-  const [attachments, setAttachments] = useState([]);
 
   useEffect(() => {
     const fetchTaskDetail = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:5000/api/taskDetail/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `https://projectmanegerbackend-1.onrender.com/api/taskDetail/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Failed to fetch task detail");
         const data = await res.json();
         setTask(data.task || null);
         setWorklogs(data.worklogs || []);
-        setAttachments(data.attachments || []);
       } catch (err) {
         console.error("❌ Error fetching task detail:", err);
       }
@@ -45,7 +47,6 @@ const TaskDetail = () => {
 
       <hr />
 
-      {/* دکمه رفتن به صفحه ثبت Worklog */}
       <button
         onClick={() => navigate(`/tasks/${id}/worklog`)}
         className="btn btn-primary"
@@ -55,7 +56,7 @@ const TaskDetail = () => {
 
       <hr />
 
-      {/* نمایش Worklogهای ثبت شده */}
+      {/* Worklogs */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Worklogs</h2>
         {worklogs.length === 0 && <p>No worklogs yet.</p>}
@@ -73,29 +74,34 @@ const TaskDetail = () => {
             <p>
               Spent Time: {w.spentTime}h | Status: {w.statusChange}
             </p>
-          </div>
-        ))}
-      </div>
 
-      <hr />
-
-      {/* نمایش Attachments */}
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Attachments</h2>
-        {attachments.length === 0 && <p>No attachments yet.</p>}
-        {attachments.map((a) => (
-          <div key={a._id} className="border p-2 mb-2">
-            <p>
-              <strong>
-                {a.uploadedBy
-                  ? `${a.uploadedBy.firstName} ${a.uploadedBy.lastName}`
-                  : "Unknown"}
-              </strong>{" "}
-              ({a.uploadedBy?.email || "No email"})
-            </p>
-            <a href={a.fileUrl} target="_blank" rel="noopener noreferrer">
-              {a.fileName}
-            </a>
+            {/* Attachments */}
+            {w.attachments && w.attachments.length > 0 && (
+              <div className="mt-2">
+                <h3 className="font-semibold">Attachments:</h3>
+                {w.attachments.map((a) => (
+                  <div key={a._id} className="flex items-center space-x-2">
+                    <span>{a.fileName}</span>
+                    {/* Preview */}
+                    <a
+                      href={`https://projectmanegerbackend-1.onrender.com/api/attachments/preview/${a._id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      Preview
+                    </a>
+                    {/* Download */}
+                    <a
+                      href={`https://projectmanegerbackend-1.onrender.com/api/attachments/download/${a._id}`}
+                      className="text-green-500 underline"
+                    >
+                      Download
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
