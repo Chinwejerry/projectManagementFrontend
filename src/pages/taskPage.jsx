@@ -49,7 +49,7 @@ const TaskPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white shadow px-4 py-3 gap-3">
-        <h1 className="text-2xl font-bold">Tasks</h1>
+        <h1 className="text-2xl font-bold text-sky-700">Tasks</h1>
 
         <div className="flex items-center bg-gray-100 px-2 rounded w-full sm:w-auto">
           <Search size={18} className="text-gray-500" />
@@ -63,7 +63,10 @@ const TaskPage = () => {
         </div>
 
         {user?.role === "admin" && (
-          <Link className="btn btn-primary ml-4" to="/createTask">
+          <Link
+            className="btn btn-primary ml-4 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50"
+            to="/createTask"
+          >
             Add Task
           </Link>
         )}
@@ -71,7 +74,7 @@ const TaskPage = () => {
 
       {/* Main content */}
       <main className="p-4 flex-1 overflow-y-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTasks.length === 0 && (
             <p className="text-center col-span-full">No tasks found.</p>
           )}
@@ -79,7 +82,7 @@ const TaskPage = () => {
           {filteredTasks.map((task) => (
             <div
               key={task._id}
-              className="card bg-base-100 shadow p-4 flex flex-col justify-between cursor-pointer hover:bg-gray-50"
+              className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow p-4 flex flex-col justify-between cursor-pointer hover:bg-gray-50"
               onClick={() => navigate(`/taskDetail/${task._id}`)}
             >
               <div className="flex justify-between items-start mb-3">
