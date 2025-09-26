@@ -62,16 +62,16 @@ const CreateUser = () => {
     <div className="flex justify-center bg-gray-100 items-center min-h-screen  p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-black text-black shadow rounded-lg p-6 w-80 flex flex-col gap-4"
+        className="text-white bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  shadow rounded-lg p-6 w-80 flex flex-col gap-4"
       >
-        <h1 className="text-xl font-bold">Create New User</h1>
+        <h1 className="text-xl font-bold text-white">Create New User</h1>
 
         {error && <p className="text-red-500">{error}</p>}
 
         <input
           type="text"
           placeholder="First Name"
-          className="border p-2 rounded  bg-amber-50"
+          className="border p-2 rounded "
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
@@ -79,7 +79,7 @@ const CreateUser = () => {
         <input
           type="text"
           placeholder="Last Name"
-          className="border p-2 rounded  bg-amber-50"
+          className="border p-2 rounded "
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           required
@@ -88,7 +88,7 @@ const CreateUser = () => {
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 rounded  bg-amber-50"
+          className="border p-2 rounded  "
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -97,14 +97,14 @@ const CreateUser = () => {
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 rounded  bg-amber-50"
+          className="border p-2 rounded "
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
         <select
-          className="border p-2 rounded  bg-amber-50"
+          className="border p-2 rounded "
           value={role}
           onChange={(e) => setRole(e.target.value)}
         >
@@ -115,7 +115,7 @@ const CreateUser = () => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 border text-white py-2 rounded hover:bg-blue-700"
         >
           {loading ? "Creating..." : "Create User"}
         </button>

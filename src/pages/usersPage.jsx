@@ -88,7 +88,7 @@ const UsersPage = () => {
       <header className="flex flex-col sm:flex-row justify-between items-center bg-transparent shadow px-4 py-3 gap-3">
         <Link
           to="/adminDashboard"
-          className="text-2xl font-bold flex items-center  gap-2"
+          className="text-2xl text-sky-700 font-bold flex items-center  gap-2"
         >
           Users
         </Link>
@@ -106,7 +106,7 @@ const UsersPage = () => {
           </div>
           <Link
             to="/createUser"
-            className="btn btn-primary flex items-center gap-2"
+            className="btn btn-primary flex items-center gap-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50"
           >
             <UserCircle size={16} /> Add User
           </Link>
@@ -116,7 +116,7 @@ const UsersPage = () => {
       {/* Users Table */}
       <main className="p-4 flex-1 overflow-y-auto">
         <div className="overflow-x-auto">
-          <table className="table w-full bg-base-100 shadow rounded">
+          <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
             <thead>
               <tr>
                 <th>Name</th>

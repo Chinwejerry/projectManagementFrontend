@@ -41,7 +41,7 @@ const Projects = () => {
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
         <Link
           to="/adminDashboard"
-          className="text-2xl font-bold flex items-center gap-2"
+          className="text-2xl font-bold flex items-center gap-2 text-sky-700"
         >
           Projects
         </Link>
@@ -60,7 +60,7 @@ const Projects = () => {
           {user?.role === "admin" && (
             <Link
               to="/createProject"
-              className="btn btn-primary flex items-center gap-2"
+              className="btn btn-primary flex items-center gap-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50"
             >
               <Plus size={16} /> Add Project
             </Link>
@@ -71,7 +71,7 @@ const Projects = () => {
       {/* Projects List */}
       <main className="p-4 flex-1 overflow-y-auto">
         <div className="overflow-x-auto">
-          <table className="table w-full bg-base-100 shadow rounded">
+          <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
             <thead>
               <tr>
                 <th>Project Name</th>

@@ -103,7 +103,7 @@ const ProfilePage = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-black shadow rounded">
+    <div className="p-6 max-w-md mx-auto bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded">
       <h1 className="text-2xl font-bold mb-4">My Profile</h1>
 
       {/* Update Name */}
@@ -111,14 +111,14 @@ const ProfilePage = () => {
         type="text"
         value={user?.firstName || ""}
         onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-        className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-700"
+        className="border p-2 rounded w-full mb-3 "
       />
       {/* Update Name */}
       <input
         type="text"
         value={user?.lastName || ""}
         onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-        className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-700"
+        className="border p-2 rounded w-full mb-3 "
       />
 
       {/* Email - read only */}
@@ -126,7 +126,7 @@ const ProfilePage = () => {
         type="email"
         value={user?.email || ""}
         disabled
-        className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-700 "
+        className="border p-2 rounded w-full mb-3  "
       />
 
       {/* Change Password */}
@@ -135,7 +135,7 @@ const ProfilePage = () => {
         placeholder="New Password"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
-        className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-300"
+        className="border p-2 rounded w-full mb-3 "
       />
 
       <input
@@ -143,12 +143,12 @@ const ProfilePage = () => {
         placeholder="Confirm New Password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2 rounded w-full mb-3 bg-amber-50 text-gray-300"
+        className="border p-2 rounded w-full mb-3 "
       />
 
       <button
         onClick={handleUpdate}
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="bg-sky-700 text-white py-2 px-4 rounded hover:bg-blue-700"
       >
         Save Changes
       </button>

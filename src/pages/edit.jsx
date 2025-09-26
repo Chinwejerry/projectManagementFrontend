@@ -81,17 +81,17 @@ const EditUserPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-black p-6 rounded-2xl shadow w-full max-w-lg">
+      <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50   hover:bg-blue-700k p-6 rounded-2xl shadow w-full max-w-lg">
         <h1 className="text-2xl font-bold mb-4">Edit User</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 ">
           <div>
             <label className="block text-sm font-medium">First Name</label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full border rounded p-2  text-gray-700 bg-amber-50"
+              className="w-full border rounded p-2  "
               required
             />
           </div>
@@ -102,7 +102,7 @@ const EditUserPage = () => {
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full border  text-gray-700 bg-amber-50 rounded p-2"
+              className="w-full border  rounded p-2"
               required
             />
           </div>
@@ -115,7 +115,7 @@ const EditUserPage = () => {
               type="email"
               value={email}
               disabled
-              className="w-full border rounded p-2  text-gray-700 bg-amber-50 cursor-not-allowed"
+              className="w-full border rounded p-2  cursor-not-allowed"
             />
           </div>
 
@@ -124,7 +124,7 @@ const EditUserPage = () => {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full border rounded  text-gray-700 bg-amber-50 p-2"
+              className="w-full border rounded  p-2"
             >
               <option value="user">User</option>
               <option value="admin">Admin</option>
@@ -134,13 +134,13 @@ const EditUserPage = () => {
           <div className="flex justify-between">
             <Link
               to="/usersPage"
-              className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+              className="px-4 py-2 rounded bg-sky-700 hover:bg-gray-400"
             >
               Cancel
             </Link>
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              className="px-4   bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 py-2 rounded  text-white hover:bg-blue-700"
             >
               Save Changes
             </button>

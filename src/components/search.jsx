@@ -7,7 +7,7 @@ const SearchBar = ({ onSearch, suggestions }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSearch) {
-      onSearch({ query, filter }); // pass search data to parent
+      onSearch({ query }); // pass search data to parent
     }
   };
 
@@ -15,30 +15,30 @@ const SearchBar = ({ onSearch, suggestions }) => {
     <div className="relative w-full">
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 w-full max-w-md px-2 rounded"
+        className="flex items-center gap-2 w-full max-w-md px-2 rounded "
       >
-        <span className="flex items-center gap-2 flex-1 bg-slate-600 px-2 rounded-xl">
+        <div className="flex items-center gap-2 flex-grow bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 px-2 rounded-xl">
           {/* Search Input */}
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={`Search by ${filter}...`}
-            className="flex-1 p-2 rounded-xl bg-slate-600"
+            className="flex-1 p-2 rounded-xl "
           />
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="p-2 rounded-xl  bg-slate-600 text-white"
+            className="p-2  "
           >
             <option value="Project Name">Project</option>
             <option value="Tasks Name">Tasks</option>
           </select>
-        </span>
+        </div>
         {/* Button */}
         <button
           type="submit"
-          className="px-4 py-2 bg-slate-600 text-white rounded-xl shadow"
+          className="px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl shadow"
         >
           Search
         </button>
