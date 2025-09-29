@@ -102,8 +102,9 @@ const CreateProject = () => {
       <form
         onSubmit={handleSubmit}
         className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-96 flex flex-col gap-4
+      "
       >
-        <h1 className="text-xl font-bold text-white">Create New Project</h1>
+        <h1 className="text-xl font-bold text-white"> Create New Project</h1>
 
         {error && <p className="text-red-500">{error}</p>}
 
