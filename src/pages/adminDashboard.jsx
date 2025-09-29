@@ -28,19 +28,39 @@ const AdminDashboard = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const handleSearch = async ({ query, filter }) => {
-    if (!query) {
-      setSuggestions([]);
-      return;
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const token = userInfo?.token;
+      if (!userInfo || !userInfo.token) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      const endpoint = filter === "project" ? "projects" : "tasks";
+      const res = await fetch(
+        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`Search failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log("Search response:", data);
+      console.log(
+        "Fetching from:",
+        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`
+      );
+
+      console.log(token);
+      setSuggestions(data);
+      setResults(data);
+    } catch (error) {
+      console.error("Error in search:", error);
     }
-
-    // Example: call your API with query + filter
-    const res = await fetch(
-      `https://projectmanegerbackend-1.onrender.com/api/data?${filter}=${query}`
-    );
-    const data = await res.json();
-
-    setSuggestions(data); // pass live suggestions
-    setResults(data); // pass final results
   };
 
   useEffect(() => {
@@ -183,8 +203,12 @@ const AdminDashboard = () => {
             ) : (
               <ul className="space-y-2">
                 {results.map((item) => (
-                  <li key={item.id} className="p-2 border rounded-xl">
-                    {item.name} – {item.category}
+                  <li
+                    key={item._id || item.id}
+                    className="p-2 border rounded-xl"
+                  >
+                    {item.name || item.title} –{" "}
+                    {item.category || "Task/Project"}
                   </li>
                 ))}
               </ul>

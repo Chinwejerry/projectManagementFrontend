@@ -34,6 +34,11 @@ const Login = () => {
 
       // save token (and maybe user info) in localStorage
       localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({ token: data.token, ...data })
+      );
+
       localStorage.setItem("role", data.role);
 
       // redirect to dashboard or users page
@@ -54,7 +59,7 @@ const Login = () => {
     <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded-lg p-6 w-80 flex flex-col gap-4"
+        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-80 flex flex-col gap-4"
       >
         <h1 className="text-xl font-bold">Login</h1>
 
