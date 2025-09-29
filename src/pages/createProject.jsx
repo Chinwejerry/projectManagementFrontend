@@ -1,16 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const CreateProject = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [members, setMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const fetchUsers = async () => {
+      setLoadingUsers(true);
+      try {
+        const res = await fetch(
+          "https://projectmanegerbackend-1.onrender.com/api/users",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load users");
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleMemberChange = (e) => {
+    const value = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedMembers(value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +75,7 @@ const CreateProject = () => {
             name,
             description,
             status,
-            members: [],
+            members: selectedMembers,
             attachments: [],
           }),
         }
@@ -64,7 +101,7 @@ const CreateProject = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-96 flex flex-col gap-4"
+        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-96 flex flex-col gap-4
       >
         <h1 className="text-xl font-bold text-white">Create New Project</h1>
 
@@ -98,10 +135,38 @@ const CreateProject = () => {
           <option value="completed">Completed</option>
         </select>
 
+        <label className="text-white">Select Members:</label>
+        <div className="flex flex-col max-h-40 overflow-y-auto border p-2 rounded bg-white">
+          {loadingUsers ? (
+            <p>Loading users...</p>
+          ) : (
+            users.map((user) => (
+              <label key={user._id} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  value={user._id}
+                  checked={selectedMembers.includes(user._id)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (e.target.checked) {
+                      setSelectedMembers([...selectedMembers, value]);
+                    } else {
+                      setSelectedMembers(
+                        selectedMembers.filter((id) => id !== value)
+                      );
+                    }
+                  }}
+                />
+                {user.firstName} {user.lastName}
+              </label>
+            ))
+          )}
+        </div>
+
         <button
           type="submit"
           disabled={loading}
-          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 border text-white py-2 rounded hover:bg-blue-700"
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white py-2 rounded hover:bg-blue-700"
         >
           {loading ? "Creating..." : "Create Project"}
         </button>

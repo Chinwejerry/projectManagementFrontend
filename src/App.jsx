@@ -14,6 +14,7 @@ import CreateProject from "./pages/createProject.jsx";
 import EditUserPage from "./pages/edit.jsx";
 import CreateTask from "./pages/createTask.jsx";
 import ProfilePage from "./pages/profilePage";
+import ProjectDetails from "./pages/projectDetails";
 //import { useAuth } from "./contexts/AuthContext";
 
 function ProtectedRoute({ children, role }) {
@@ -122,6 +123,14 @@ function App() {
           element={
             <ProtectedRoute role="admin">
               <CreateProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects/:id"
+          element={
+            <ProtectedRoute>
+              <ProjectDetails />
             </ProtectedRoute>
           }
         />

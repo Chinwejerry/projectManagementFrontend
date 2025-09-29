@@ -69,22 +69,29 @@ const Projects = () => {
       </header>
 
       {/* Projects List */}
-      <main className="p-4 flex-1 overflow-y-auto">
+      <main className="p-4 flex-1 overflow-y-auto bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
         <div className="overflow-x-auto">
-          <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
+          <table className="table w-full bg-white shadow rounded text-left">
             <thead>
               <tr>
-                <th>Project Name</th>
-                <th>Status</th>
-                <th>Created At</th>
-                <th>Created By</th>
+                <th className="text-left">Project Name</th>
+                <th className="text-center">Status</th>
+                <th className="text-center">Created At</th>
+                <th className="text-left">Created By</th>
               </tr>
             </thead>
             <tbody>
               {filteredProjects.map((project) => (
-                <tr key={project._id}>
-                  <td>{project.name}</td>
+                <tr key={project._id} className="hover:bg-gray-100">
                   <td>
+                    <Link
+                      to={`/projects/${project._id}`}
+                      className="font-semibold text-sky-700 hover:text-sky-900 hover:underline transition-colors duration-200"
+                    >
+                      {project.name}
+                    </Link>
+                  </td>
+                  <td className="text-center">
                     <span
                       className={`badge ${
                         project.status === "pending"
@@ -99,7 +106,9 @@ const Projects = () => {
                       {project.status}
                     </span>
                   </td>
-                  <td>{new Date(project.createdAt).toLocaleDateString()}</td>
+                  <td className="text-center">
+                    {new Date(project.createdAt).toLocaleDateString()}
+                  </td>
                   <td>
                     {project.createdBy?.firstName} {project.createdBy?.lastName}
                   </td>

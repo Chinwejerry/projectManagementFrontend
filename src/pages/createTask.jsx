@@ -14,14 +14,15 @@ const CreateTask = () => {
   const [loading, setLoading] = useState(false);
 
   const [projects, setProjects] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [projectMembers, setProjectMembers] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
-  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [loadingMembers, setLoadingMembers] = useState(false);
 
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
+  // fetch all projects
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) return;
 
     const fetchProjects = async () => {
@@ -43,28 +44,41 @@ const CreateTask = () => {
       }
     };
 
-    const fetchUsers = async () => {
-      setLoadingUsers(true);
+    fetchProjects();
+  }, [token]);
+
+  // fetch members of selected project
+  useEffect(() => {
+    if (!projectId) {
+      setProjectMembers([]);
+      return;
+    }
+
+    const fetchProjectMembers = async () => {
+      setLoadingMembers(true);
       try {
         const res = await fetch(
-          "https://projectmanegerbackend-1.onrender.com/api/users",
+          `https://projectmanegerbackend-1.onrender.com/api/projects/${projectId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to load users");
-        setUsers(data);
+        if (!res.ok)
+          throw new Error(data.message || "Failed to load project members");
+
+        // فقط اعضای با نقش user
+        const users = data.members.filter((member) => member.role === "user");
+        setProjectMembers(users);
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoadingUsers(false);
+        setLoadingMembers(false);
       }
     };
 
-    fetchProjects();
-    fetchUsers();
-  }, []);
+    fetchProjectMembers();
+  }, [projectId, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +86,6 @@ const CreateTask = () => {
     setError(null);
 
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         alert("Please log in first");
         navigate("/login");
@@ -103,9 +116,7 @@ const CreateTask = () => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to create task");
-      }
+      if (!res.ok) throw new Error(data.message || "Failed to create task");
 
       alert("Task created successfully ✅");
       navigate("/taskPage");
@@ -161,17 +172,17 @@ const CreateTask = () => {
         </select>
 
         <select
-          className="border p-2 rounded "
+          className="border p-2 rounded"
           value={assignedTo}
           onChange={(e) => setAssignedTo(e.target.value)}
         >
           <option value="">-- Assign To (optional) --</option>
-          {loadingUsers ? (
-            <option disabled>Loading users...</option>
+          {loadingMembers ? (
+            <option disabled>Loading members...</option>
           ) : (
-            users.map((user) => (
-              <option className="text-amber-50" key={user._id} value={user._id}>
-                {user.firstName}
+            projectMembers.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.firstName} {user.lastName}
               </option>
             ))
           )}
