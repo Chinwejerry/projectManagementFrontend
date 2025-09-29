@@ -15,24 +15,15 @@ import EditUserPage from "./pages/edit.jsx";
 import CreateTask from "./pages/createTask.jsx";
 import ProfilePage from "./pages/profilePage";
 import ProjectDetails from "./pages/projectDetails";
-//import { useAuth } from "./contexts/AuthContext";
+import MessagesPage from "./pages/messagesPage";
 
 function ProtectedRoute({ children, role }) {
-  // read from localStorage
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
 
-  // 1️⃣ check if logged in
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
+  if (!token) return <Navigate to="/" replace />;
+  if (role && userRole !== role) return <Navigate to="/" replace />;
 
-  // 2️⃣ check role if specified
-  if (role && userRole !== role) {
-    return <Navigate to="/" replace />;
-  }
-
-  // 3️⃣ all good, show the page
   return children;
 }
 
@@ -40,7 +31,6 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        {/* Login as index */}
         <Route index element={<Login />} />
 
         {/* USER ROUTES */}
@@ -81,6 +71,15 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        {/* MESSAGES ROUTE */}
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <MessagesPage />
             </ProtectedRoute>
           }
         />
@@ -150,8 +149,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* 404 fallback */}
 
         <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
