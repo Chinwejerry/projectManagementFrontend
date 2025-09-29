@@ -49,7 +49,9 @@ const TaskPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
       <header className="flex flex-col sm:flex-row justify-between items-center bg-white shadow px-4 py-3 gap-3">
-        <h1 className="text-2xl font-bold text-sky-700">Tasks</h1>
+        <Link to={"/adminDashboard"} className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sky-700">Tasks</h1>
+        </Link>
 
         <div className="flex items-center bg-gray-100 px-2 rounded w-full sm:w-auto">
           <Search size={18} className="text-gray-500" />

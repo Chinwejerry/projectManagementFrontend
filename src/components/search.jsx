@@ -2,12 +2,12 @@ import { useState } from "react";
 
 const SearchBar = ({ onSearch, suggestions }) => {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("name");
+  const [filter, setFilter] = useState("project");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSearch) {
-      onSearch({ query }); // pass search data to parent
+      onSearch({ query, filter }); // pass search data to parent
     }
   };
 
@@ -31,8 +31,8 @@ const SearchBar = ({ onSearch, suggestions }) => {
             onChange={(e) => setFilter(e.target.value)}
             className="p-2  "
           >
-            <option value="Project Name">Project</option>
-            <option value="Tasks Name">Tasks</option>
+            <option value="project">Project</option>
+            <option value="task">Tasks</option>
           </select>
         </div>
         {/* Button */}
@@ -46,15 +46,21 @@ const SearchBar = ({ onSearch, suggestions }) => {
       {/* Suggestions Dropdown */}
       {suggestions.length > 0 && query && (
         <ul className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow z-10 max-h-48 overflow-y-auto">
-          {suggestions.map((item) => (
-            <li
-              key={item.id}
-              onClick={() => setQuery(item.name)} // Pick suggestion
-              className="p-2 cursor-pointer hover:bg-gray-100"
-            >
-              {item.name} – {item.category}
-            </li>
-          ))}
+          {suggestions.map((item) => {
+            const label = item.name || item.title;
+            return (
+              <li
+                key={item._id}
+                onClick={() => {
+                  setQuery(label);
+                  onSearch({ query: label, filter });
+                }}
+                className="p-2 cursor-pointer hover:bg-gray-100"
+              >
+                {label}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

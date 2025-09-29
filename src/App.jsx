@@ -62,7 +62,7 @@ function App() {
         <Route
           path="/taskDetail/:id"
           element={
-            <ProtectedRoute role="user">
+            <ProtectedRoute>
               <TaskDetail />
             </ProtectedRoute>
           }
