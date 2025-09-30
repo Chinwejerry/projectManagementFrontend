@@ -18,7 +18,7 @@ const TaskPage = () => {
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const navigate = useNavigate();
 
   useEffect(() => {
