@@ -3,7 +3,7 @@ import {
   Search,
   Edit,
   Trash2,
-  UserCircle,
+  LogOut,
   Plus,
   Home,
   Folder,
@@ -140,10 +140,16 @@ const UsersPage = () => {
             <ClipboardList size={18} /> Tasks
           </Link>
           <Link
-            to="#"
+            to="/messages"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
-            <Settings size={18} /> Settings
+            <ClipboardList size={18} /> Messages
+          </Link>
+          <Link
+            to="/"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <LogOut size={18} /> Logout
           </Link>
         </nav>
       </aside>

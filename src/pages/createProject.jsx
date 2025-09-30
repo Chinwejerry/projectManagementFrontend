@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowBigLeft } from "lucide-react";
 
 const CreateProject = () => {
   const [name, setName] = useState("");
@@ -98,80 +99,88 @@ const CreateProject = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-96 flex flex-col gap-4
-      "
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 ">
+      <span
+        className="p-4 text-cyan-50  flex items-start"
+        onClick={() => window.history.back()}
       >
-        <h1 className="text-xl font-bold text-white"> Create New Project</h1>
-
-        {error && <p className="text-red-500">{error}</p>}
-
-        <input
-          type="text"
-          placeholder="Project Name"
-          className="border p-2 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        <textarea
-          placeholder="Description"
-          className="border p-2 rounded"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <select
-          className="border p-2 rounded"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          required
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-96 flex flex-col gap-4
+      "
         >
-          <option value="">-- Select Status --</option>
-          <option value="pending">Pending</option>
-          <option value="in-progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
+          <h1 className="text-xl font-bold text-white"> Create New Project</h1>
 
-        <label className="text-white">Select Members:</label>
-        <div className="flex flex-col max-h-40 overflow-y-auto border p-2 rounded bg-white">
-          {loadingUsers ? (
-            <p>Loading users...</p>
-          ) : (
-            users.map((user) => (
-              <label key={user._id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={user._id}
-                  checked={selectedMembers.includes(user._id)}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (e.target.checked) {
-                      setSelectedMembers([...selectedMembers, value]);
-                    } else {
-                      setSelectedMembers(
-                        selectedMembers.filter((id) => id !== value)
-                      );
-                    }
-                  }}
-                />
-                {user.firstName} {user.lastName}
-              </label>
-            ))
-          )}
-        </div>
+          {error && <p className="text-red-500">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? "Creating..." : "Create Project"}
-        </button>
-      </form>
+          <input
+            type="text"
+            placeholder="Project Name"
+            className="border p-2 rounded"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+
+          <textarea
+            placeholder="Description"
+            className="border p-2 rounded"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+
+          <select
+            className="border p-2 rounded"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            required
+          >
+            <option value="">-- Select Status --</option>
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <label className="text-white">Select Members:</label>
+          <div className="flex flex-col max-h-40 overflow-y-auto border p-2 rounded bg-white">
+            {loadingUsers ? (
+              <p>Loading users...</p>
+            ) : (
+              users.map((user) => (
+                <label key={user._id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    value={user._id}
+                    checked={selectedMembers.includes(user._id)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (e.target.checked) {
+                        setSelectedMembers([...selectedMembers, value]);
+                      } else {
+                        setSelectedMembers(
+                          selectedMembers.filter((id) => id !== value)
+                        );
+                      }
+                    }}
+                  />
+                  {user.firstName} {user.lastName}
+                </label>
+              ))
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white py-2 rounded hover:bg-blue-700"
+          >
+            {loading ? "Creating..." : "Create Project"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowBigLeft } from "lucide-react";
 
 const CreateTask = () => {
   const [title, setTitle] = useState("");
@@ -128,119 +129,127 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded-lg p-6 w-96 flex flex-col gap-4"
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 ">
+      <span
+        className="p-4 text-cyan-50  flex items-start"
+        onClick={() => window.history.back()}
       >
-        <h1 className="text-xl font-bold text-white">Create New Task</h1>
-
-        {error && <p className="text-red-500">{error}</p>}
-
-        <input
-          type="text"
-          placeholder="Task Title"
-          className="border p-2 rounded"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-
-        <textarea
-          placeholder="Description"
-          className="border p-2 rounded"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <select
-          className="border p-2 rounded"
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
-          required
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded-lg p-6 w-96 flex flex-col gap-4"
         >
-          <option value="">-- Select Project --</option>
-          {loadingProjects ? (
-            <option disabled>Loading projects...</option>
-          ) : (
-            projects.map((proj) => (
-              <option key={proj._id} value={proj._id}>
-                {proj.name}
-              </option>
-            ))
-          )}
-        </select>
+          <h1 className="text-xl font-bold text-white">Create New Task</h1>
 
-        <select
-          className="border p-2 rounded"
-          value={assignedTo}
-          onChange={(e) => setAssignedTo(e.target.value)}
-        >
-          <option value="">-- Assign To (optional) --</option>
-          {loadingMembers ? (
-            <option disabled>Loading members...</option>
-          ) : (
-            projectMembers.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.firstName} {user.lastName}
-              </option>
-            ))
-          )}
-        </select>
+          {error && <p className="text-red-500">{error}</p>}
 
-        <select
-          className="border p-2 rounded"
-          value={types}
-          onChange={(e) => setTypes(e.target.value)}
-          required
-        >
-          <option value="">-- Select Type --</option>
-          <option value="Support">Support</option>
-          <option value="Training">Training</option>
-          <option value="Monitoring">Monitoring</option>
-          <option value="Production">Production</option>
-          <option value="R&D">R&D</option>
-        </select>
+          <input
+            type="text"
+            placeholder="Task Title"
+            className="border p-2 rounded"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
 
-        <select
-          className="border p-2 rounded"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          required
-        >
-          <option value="">-- Select Status --</option>
-          <option value="pending">Pending</option>
-          <option value="in-progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
+          <textarea
+            placeholder="Description"
+            className="border p-2 rounded"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-        <select
-          className="border p-2 rounded"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          required
-        >
-          <option value="">-- Select Priority --</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+          <select
+            className="border p-2 rounded"
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+            required
+          >
+            <option value="">-- Select Project --</option>
+            {loadingProjects ? (
+              <option disabled>Loading projects...</option>
+            ) : (
+              projects.map((proj) => (
+                <option key={proj._id} value={proj._id}>
+                  {proj.name}
+                </option>
+              ))
+            )}
+          </select>
 
-        <input
-          type="date"
-          className="border p-2 rounded"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-        />
+          <select
+            className="border p-2 rounded"
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+          >
+            <option value="">-- Assign To (optional) --</option>
+            {loadingMembers ? (
+              <option disabled>Loading members...</option>
+            ) : (
+              projectMembers.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.firstName} {user.lastName}
+                </option>
+              ))
+            )}
+          </select>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? "Creating..." : "Create Task"}
-        </button>
-      </form>
+          <select
+            className="border p-2 rounded"
+            value={types}
+            onChange={(e) => setTypes(e.target.value)}
+            required
+          >
+            <option value="">-- Select Type --</option>
+            <option value="Support">Support</option>
+            <option value="Training">Training</option>
+            <option value="Monitoring">Monitoring</option>
+            <option value="Production">Production</option>
+            <option value="R&D">R&D</option>
+          </select>
+
+          <select
+            className="border p-2 rounded"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            required
+          >
+            <option value="">-- Select Status --</option>
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <select
+            className="border p-2 rounded"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            required
+          >
+            <option value="">-- Select Priority --</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
+          >
+            {loading ? "Creating..." : "Create Task"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
