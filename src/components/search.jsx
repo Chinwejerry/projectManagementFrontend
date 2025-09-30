@@ -45,7 +45,7 @@ const SearchBar = ({ onSearch, suggestions }) => {
       </form>
       {/* Suggestions Dropdown */}
       {suggestions.length > 0 && query && (
-        <ul className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow z-10 max-h-48 overflow-y-auto">
+        <ul className="absolute left-0 right-0 mt-1 bg-sky-900 border border-gray-200 rounded-xl shadow z-10 max-h-48 overflow-y-auto">
           {suggestions.map((item) => {
             const label = item.name || item.title;
             return (
@@ -55,7 +55,7 @@ const SearchBar = ({ onSearch, suggestions }) => {
                   setQuery(label);
                   onSearch({ query: label, filter });
                 }}
-                className="p-2 cursor-pointer hover:bg-gray-100"
+                className="p-2 cursor-pointer hover:bg-sky-700"
               >
                 {label}
               </li>
