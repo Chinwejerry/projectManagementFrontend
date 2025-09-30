@@ -192,6 +192,14 @@ const AdminDashboard = () => {
         </nav>
       </aside>
 
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden p-2"
+          onClick={() => setSidebarOpen(true)}
+        />
+      )}
+
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Navbar */}

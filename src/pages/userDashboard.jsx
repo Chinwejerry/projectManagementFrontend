@@ -23,23 +23,43 @@ const UserDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  //const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
   const handleSearch = async ({ query, filter }) => {
-    if (!query) {
-      setSuggestions([]);
-      return;
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const token = userInfo?.token;
+      if (!userInfo || !userInfo.token) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      const endpoint = filter === "project" ? "projects" : "tasks";
+      const res = await fetch(
+        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`Search failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log("Search response:", data);
+      console.log(
+        "Fetching from:",
+        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`
+      );
+
+      console.log(token);
+      setSuggestions(data);
+      setResults(data);
+    } catch (error) {
+      console.error("Error in search:", error);
     }
-
-    // Example: call your API with query + filter
-    const res = await fetch(
-      `https://projectmanegerbackend-1.onrender.com/api/data?${filter}=${query}`
-    );
-    const data = await res.json();
-
-    setSuggestions(data); // pass live suggestions
-    // setResults(data); // pass final results
   };
 
   const token = localStorage.getItem("token");
@@ -181,7 +201,7 @@ const UserDashboard = () => {
         <header className="flex justify-between items-center  shadow px-4 py-2">
           <SearchBar onSearch={handleSearch} suggestions={suggestions} />
           <div className="mt-6">
-            {/* {results.length === 0 ? (
+            {results.length === 0 ? (
               <p>No results yet.</p>
             ) : (
               <ul className="space-y-2">
@@ -191,7 +211,7 @@ const UserDashboard = () => {
                   </li>
                 ))}
               </ul>
-            )} */}
+            )}
           </div>
 
           <div className="flex items-center gap-2">

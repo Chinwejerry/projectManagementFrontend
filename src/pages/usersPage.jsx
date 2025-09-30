@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
-import { Search, Edit, Trash2, UserCircle } from "lucide-react";
+import {
+  Search,
+  Edit,
+  Trash2,
+  UserCircle,
+  Plus,
+  Home,
+  Folder,
+  Users,
+  ClipboardList,
+  Settings,
+  X,
+} from "lucide-react";
 import { Link } from "react-router";
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]); // state for users
   const [search, setSearch] = useState(""); // state for search
   const [loading, setLoading] = useState(true); // state for loading
-  const [error, setError] = useState(null); // state for errors
+  const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  // state for errors
 
   // Fetch users from backend API (mock example)
   useEffect(() => {
@@ -83,99 +98,150 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Page Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-center bg-transparent shadow px-4 py-3 gap-3">
-        <Link
-          to="/adminDashboard"
-          className="text-2xl text-sky-700 font-bold flex items-center  gap-2"
-        >
-          Users
-        </Link>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center bg-gray-100 px-2 rounded w-full">
-            <Search size={18} className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search users..."
-              className="bg-transparent outline-none p-1 w-full"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <Link
-            to="/createUser"
-            className="btn btn-primary flex items-center gap-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50"
-          >
-            <UserCircle size={16} /> Add User
-          </Link>
+    <div className="flex h-screen bg-gray-100 text-cyan-50">
+      {/* Sidebar */}
+      <aside
+        className={`fixed md:static inset-y-0 left-0 transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 transition-transform duration-300 ease-in-out 
+           w-64 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50`}
+      >
+        <div className="flex justify-between items-center mb-6 md:hidden">
+          <h1 className="text-2xl font-bold">Admin</h1>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
-      </header>
 
-      {/* Users Table */}
-      <main className="p-4 flex-1 overflow-y-auto">
-        <div className="overflow-x-auto">
-          <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.firstName}</td>
-                  <td>{user.lastName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <span
-                      className={`badge ${
-                        user.status === "Active"
-                          ? "badge-primary"
-                          : "badge-accent"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="flex gap-2">
-                    {/* <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
+        <h1 className="hidden md:block text-2xl font-bold mb-6"> Admin</h1>
+        <nav className="flex flex-col space-y-2 ">
+          <Link
+            to="/adminDashboard"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <Home size={18} /> Dashboard
+          </Link>
+          <Link
+            to="/projects"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <Folder size={18} /> Projects
+          </Link>
+          <Link
+            to="/usersPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <Users size={18} /> Users
+          </Link>
+          <Link
+            to="/taskPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <ClipboardList size={18} /> Tasks
+          </Link>
+          <Link
+            to="#"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <Settings size={18} /> Settings
+          </Link>
+        </nav>
+      </aside>
+      {/* Page Header */}
+      <div className="flex flex-col flex-1">
+        <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
+          <Link
+            to="/adminDashboard"
+            className="text-2xl font-bold flex items-center gap-2 text-sky-700"
+          >
+            Users
+          </Link>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center bg-gray-100 px-2 rounded w-full">
+              <Search size={18} className="text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search users..."
+                className="bg-transparent outline-none p-1 w-full"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            {user?.role === "admin" && (
+              <Link
+                to="/createUser"
+                className="btn btn-primary flex items-center gap-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50"
+              >
+                <Plus size={16} /> Add Users
+              </Link>
+            )}
+          </div>
+        </header>
+        {/* Users Table */}
+        <main className="p-4 flex-1 overflow-y-auto">
+          <div className="overflow-x-auto">
+            <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.firstName}</td>
+                    <td>{user.lastName}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          user.status === "Active"
+                            ? "badge-primary"
+                            : "badge-accent"
+                        }`}
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className="flex gap-2">
+                      {/* <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
                       <Edit size={14} /> Edit
                     </button> */}
-                    <Link
-                      to={`/edit/${user._id}`}
-                      className="btn btn-sm btn-outline btn-success flex items-center gap-1"
-                    >
-                      <Edit size={14} /> Edit
-                    </Link>
+                      <Link
+                        to={`/edit/${user._id}`}
+                        className="btn btn-sm btn-outline btn-success flex items-center gap-1"
+                      >
+                        <Edit size={14} /> Edit
+                      </Link>
 
-                    <Link
-                      className="btn btn-sm btn-outline btn-error flex items-center gap-1"
-                      onClick={() => handleDelete(user._id)}
-                    >
-                      <Trash2 size={14} /> Delete
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-              {filteredUsers.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="text-center py-4">
-                    No users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </main>
+                      <Link
+                        className="btn btn-sm btn-outline btn-error flex items-center gap-1"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <Trash2 size={14} /> Delete
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+                {filteredUsers.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="text-center py-4">
+                      No users found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
