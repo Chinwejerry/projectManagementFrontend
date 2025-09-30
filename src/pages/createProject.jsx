@@ -113,7 +113,9 @@ const CreateProject = () => {
       "
         >
           <h1 className="text-xl font-bold text-white"> Create New Project</h1>
+
           {error && <p className="text-red-500">{error}</p>}
+
           <input
             type="text"
             placeholder="Project Name"
@@ -122,12 +124,14 @@ const CreateProject = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+
           <textarea
             placeholder="Description"
             className="border p-2 rounded"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+
           <select
             className="border p-2 rounded"
             value={status}
@@ -140,27 +144,38 @@ const CreateProject = () => {
             <option value="completed">Completed</option>
           </select>
 
-          {loadingUsers ? (
-            <p>Loading users...</p>
-          ) : (
-            <select
-              value={selectedMembers[0] || ""}
-              onChange={(e) => setSelectedMembers([e.target.value])}
-              className="border p-2 rounded"
-            >
-              <option value="">Select a user</option>
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
+          <label className="text-white">Select Members:</label>
+          <div className="flex flex-col max-h-40 overflow-y-auto border p-2 rounded bg-sky-700">
+            {loadingUsers ? (
+              <p>Loading users...</p>
+            ) : (
+              users.map((user) => (
+                <label key={user._id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    value={user._id}
+                    checked={selectedMembers.includes(user._id)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (e.target.checked) {
+                        setSelectedMembers([...selectedMembers, value]);
+                      } else {
+                        setSelectedMembers(
+                          selectedMembers.filter((id) => id !== value)
+                        );
+                      }
+                    }}
+                  />
                   {user.firstName} {user.lastName}
-                </option>
-              ))}
-            </select>
-          )}
+                </label>
+              ))
+            )}
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700 "
+            className="bg-sky-700  text-white py-2 rounded hover:bg-blue-700"
           >
             {loading ? "Creating..." : "Create Project"}
           </button>

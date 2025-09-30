@@ -8,7 +8,6 @@ const WorklogForm = () => {
   const [comment, setComment] = useState("");
   const [spentTime, setSpentTime] = useState("");
   const [statusChange, setStatusChange] = useState("");
-
   const [file, setFile] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -92,18 +91,15 @@ const WorklogForm = () => {
             </select>
           </div>
           <div>
+            <label>Attachment (optional):</label>
             <input
-              type="number"
-              placeholder="Spent Time (hours)"
-              className="border p-2 rounded w-full"
+              type="file"
               onChange={(e) => setFile(e.target.files[0])}
+              className="border p-2 rounded w-full"
             />
           </div>
-          <button
-            type="submit"
-            className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
-          >
-            Add WorkLog
+          <button type="submit" className="btn btn-primary w-full">
+            Submit Worklog
           </button>
         </form>
       </div>
