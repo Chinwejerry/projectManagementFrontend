@@ -6,7 +6,7 @@ import {
   Folder,
   Users,
   ClipboardList,
-  Settings,
+  LogOut,
   X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -88,10 +88,16 @@ const Projects = () => {
             <ClipboardList size={18} /> Tasks
           </Link>
           <Link
-            to="#"
+            to="/messages"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
-            <Settings size={18} /> Settings
+            <ClipboardList size={18} /> Messages
+          </Link>
+          <Link
+            to="/"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <LogOut size={18} /> Logout
           </Link>
         </nav>
       </aside>
