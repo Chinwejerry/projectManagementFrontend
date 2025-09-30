@@ -25,6 +25,8 @@ const UserDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [results, setResults] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userName = userInfo ? `${userInfo.firstName}` : "User";
 
   const handleSearch = async ({ query, filter }) => {
     try {
@@ -232,7 +234,7 @@ const UserDashboard = () => {
 
             <Link to="/profilePage" className="flex items-center gap-2">
               <UserCircle size={32} className="text-sky-700 " />
-              <span className="font-medium text-sky-700">User</span>
+              <span className="font-medium text-sky-700">{userName}</span>
             </Link>
           </div>
         </header>

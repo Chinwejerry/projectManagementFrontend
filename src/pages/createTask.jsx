@@ -68,7 +68,6 @@ const CreateTask = () => {
         if (!res.ok)
           throw new Error(data.message || "Failed to load project members");
 
-        // فقط اعضای با نقش user
         const users = data.members.filter((member) => member.role === "user");
         setProjectMembers(users);
       } catch (err) {
