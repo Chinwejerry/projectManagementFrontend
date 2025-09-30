@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ArrowBigLeft } from "lucide-react";
 
 const WorklogForm = () => {
   const { taskId } = useParams();
@@ -7,6 +8,7 @@ const WorklogForm = () => {
   const [comment, setComment] = useState("");
   const [spentTime, setSpentTime] = useState("");
   const [statusChange, setStatusChange] = useState("");
+
   const [file, setFile] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -42,54 +44,69 @@ const WorklogForm = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Add Worklog</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label>Comment:</label>
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            className="border p-2 w-full"
-            required
-          />
-        </div>
-        <div>
-          <label>Spent Time (h):</label>
-          <input
-            type="number"
-            value={spentTime}
-            onChange={(e) => setSpentTime(e.target.value)}
-            className="border p-2 w-full"
-            required
-          />
-        </div>
-        <div>
-          <label>Status Change:</label>
-          <select
-            value={statusChange}
-            onChange={(e) => setStatusChange(e.target.value)}
-            className="border p-2 w-full"
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 ">
+      <span
+        className="p-4 text-cyan-50  flex items-start"
+        onClick={() => window.history.back()}
+      >
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded-lg p-6 w-96 flex flex-col gap-4"
+        >
+          <h1 className="text-2xl font-bold mb-4">Add Worklog</h1>
+
+          <div>
+            <input
+              type="text"
+              placeholder="Comment"
+              className="border p-2 rounded w-full"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <input
+              type="number"
+              placeholder="Spent Time (hours)"
+              className="border p-2 rounded w-full"
+              value={spentTime}
+              onChange={(e) => setSpentTime(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <select
+              value={statusChange}
+              onChange={(e) => setStatusChange(e.target.value)}
+              placeholder="Status Change (optional)"
+              className="border p-2 rounded w-full"
+            >
+              <option value="">Select Status (optional)</option>
+              <option value="pending">pending</option>
+              <option value="in-progress">in-progress</option>
+              <option value="completed">completed</option>
+            </select>
+          </div>
+          <div>
+            <input
+              type="number"
+              placeholder="Spent Time (hours)"
+              className="border p-2 rounded w-full"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
           >
-            <option value="">Select Status (optional)</option>
-            <option value="pending">pending</option>
-            <option value="in-progress">in-progress</option>
-            <option value="completed">completed</option>
-          </select>
-        </div>
-        <div>
-          <label>Attachment (optional):</label>
-          <input
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="border p-2 w-full"
-          />
-        </div>
-        <button type="submit" className="btn btn-primary w-full">
-          Submit Worklog
-        </button>
-      </form>
+            Add WorkLog
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

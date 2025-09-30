@@ -61,7 +61,7 @@ function App() {
         <Route
           path="//tasks/:taskId/worklog"
           element={
-            <ProtectedRoute role="user">
+            <ProtectedRoute>
               <WorklogForm />
             </ProtectedRoute>
           }
