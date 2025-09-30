@@ -16,7 +16,7 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
     const fetchProjects = async () => {
