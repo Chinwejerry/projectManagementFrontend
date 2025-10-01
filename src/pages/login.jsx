@@ -56,7 +56,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url(public/images/bg.png)] bg-no-repeat bg-center bg-cover p-4">
+    <div className="flex justify-center items-center min-h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
       <form
         onSubmit={handleSubmit}
         className=" bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-80 flex flex-col gap-4"
