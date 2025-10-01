@@ -263,33 +263,6 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Projects + chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
-              <h3 className="text-lg font-semibold mb-3">Projects</h3>
-              <ul className="divide-y">
-                {projects.map((p) => (
-                  <li key={p._id} className="py-2 flex justify-between">
-                    <span>{p.name}</span>
-                    <span
-                      className={`badge ${
-                        p.status === "completed"
-                          ? "badge-success"
-                          : "badge-warning"
-                      }`}
-                    >
-                      {p.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
-              <h3 className="text-lg font-semibold mb-3">Project Status</h3>
-              <Pie data={projectChartData} />
-            </div>
-          </div>
-
           {/* Tasks + chart */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
@@ -314,6 +287,32 @@ const AdminDashboard = () => {
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Task Status</h3>
               <Pie data={taskChartData} />
+            </div>
+          </div>
+          {/* Projects + chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-3">Projects</h3>
+              <ul className="divide-y">
+                {projects.map((p) => (
+                  <li key={p._id} className="py-2 flex justify-between">
+                    <span>{p.name}</span>
+                    <span
+                      className={`badge ${
+                        p.status === "completed"
+                          ? "badge-success"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
+              <h3 className="text-lg font-semibold mb-3">Project Status</h3>
+              <Pie data={projectChartData} />
             </div>
           </div>
         </main>
