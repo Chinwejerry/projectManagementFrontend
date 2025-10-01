@@ -147,7 +147,7 @@ const CreateTask = () => {
           <input
             type="text"
             placeholder="Task Title"
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded "
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -155,13 +155,13 @@ const CreateTask = () => {
 
           <textarea
             placeholder="Description"
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
 
           <select
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
             required
@@ -179,7 +179,7 @@ const CreateTask = () => {
           </select>
 
           <select
-            className="border p-2 rounded"
+            className="border border-white text-white p-2 rounded"
             value={assignedTo}
             onChange={(e) => setAssignedTo(e.target.value)}
           >
@@ -196,7 +196,7 @@ const CreateTask = () => {
           </select>
 
           <select
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={types}
             onChange={(e) => setTypes(e.target.value)}
             required
@@ -210,7 +210,7 @@ const CreateTask = () => {
           </select>
 
           <select
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             required
@@ -222,7 +222,7 @@ const CreateTask = () => {
           </select>
 
           <select
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
             required
@@ -235,7 +235,7 @@ const CreateTask = () => {
 
           <input
             type="date"
-            className="border p-2 rounded"
+            className="border border-white bg-transparent text-white p-2 rounded"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
@@ -243,7 +243,7 @@ const CreateTask = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
+            className="bg-sky-700 border border-white text-white py-2 rounded hover:bg-blue-700"
           >
             {loading ? "Creating..." : "Create Task"}
           </button>

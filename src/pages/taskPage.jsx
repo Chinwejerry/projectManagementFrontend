@@ -56,8 +56,8 @@ const TaskPage = () => {
   if (error) return <p className="p-4 text-red-500">{error}</p>;
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <div className="flex h-screen bg-gray-100 text-cyan-50">
+    <div className="flex h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
+      <div className="flex h-screen b text-white">
         {/* Sidebar */}
         <aside
           className={`fixed md:static inset-y-0 left-0 transform ${
@@ -114,7 +114,7 @@ const TaskPage = () => {
         </aside>
         {/* Navbar */}
         <div className="flex flex-col flex-1">
-          <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
+          <header className="flex flex-col sm:flex-row justify-between items-center   shadow px-4 py-3 gap-3">
             <Link
               to="/adminDashboard"
               className="text-2xl font-bold flex items-center gap-2 text-sky-700"
@@ -123,7 +123,7 @@ const TaskPage = () => {
             </Link>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <div className="flex items-center bg-gray-100 px-2 rounded w-full">
+              <div className="flex text-black items-center border border-white  px-2 rounded w-full">
                 <Search size={18} className="text-gray-500" />
                 <input
                   type="text"
@@ -148,7 +148,7 @@ const TaskPage = () => {
           <main className="p-4 flex-1 overflow-y-auto">
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredTasks.length === 0 && (
-                <p className="text-center col-span-full">No tasks found.</p>
+                <p className="text-center col-span-full"></p>
               )}
 
               {filteredTasks.map((task) => (
@@ -160,7 +160,7 @@ const TaskPage = () => {
                   <div className="flex justify-between items-start mb-3">
                     <h2 className="font-semibold text-lg">{task.title}</h2>
                     <span
-                      className={`badge ${
+                      className={` w-28 badge ${
                         task.status === "completed"
                           ? "badge-accent"
                           : task.status === "in-progress"
@@ -171,7 +171,7 @@ const TaskPage = () => {
                       {task.status}
                     </span>
                   </div>
-                  <p className="text-gray-500 mb-3">
+                  <p className="text-gray-300 mb-3">
                     Due: {task.dueDate ? task.dueDate.slice(0, 10) : "N/A"}
                   </p>
                 </div>

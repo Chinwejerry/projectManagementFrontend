@@ -129,8 +129,8 @@ const MessagePage = () => {
       >
         <ArrowBigLeft />
       </span>
-      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen  bg-gray-100 p-4">
-        <h1 className="text-2xl font-bold mb-4">Messages</h1>
+      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen  bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
+        <h1 className="text-2xl font-bold mb-4 text-sky-700">Messages</h1>
 
         <div className="flex gap-4 mb-4">
           <button
@@ -216,14 +216,15 @@ const MessagePage = () => {
         </div>
 
         {/* Modal */}
+        <div className="bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover"></div>
         {role === "admin" && (
           <Modal
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
-            className="bg-white p-6 rounded shadow-lg max-w-md mx-auto mt-20"
+            className=" p-6 rounded shadow-lg max-w-md mx-auto mt-20 "
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start"
           >
-            <h2 className="text-xl font-bold mb-4">New Message</h2>
+            <h2 className="text-xl font-bold mb-4 text-white">New Message</h2>
             <form onSubmit={handleSendMessage} className="flex flex-col gap-3">
               <select
                 className="border p-2 rounded"
@@ -268,7 +269,7 @@ const MessagePage = () => {
               )}
 
               <textarea
-                className="border p-2 rounded"
+                className="border   p-2 rounded"
                 placeholder="Message content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}

@@ -79,7 +79,7 @@ const CreateUser = () => {
           <input
             type="text"
             placeholder="First Name"
-            className="border p-2 rounded "
+            className="border text-white p-2 rounded border-white bg-transparent"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
@@ -87,7 +87,7 @@ const CreateUser = () => {
           <input
             type="text"
             placeholder="Last Name"
-            className="border p-2 rounded "
+            className="border border-white text-white bg-transparent p-2 rounded "
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
@@ -96,7 +96,7 @@ const CreateUser = () => {
           <input
             type="email"
             placeholder="Email"
-            className="border p-2 rounded  "
+            className="border border-white text-white bg-transparent p-2 rounded  "
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -105,14 +105,14 @@ const CreateUser = () => {
           <input
             type="password"
             placeholder="Password"
-            className="border p-2 rounded "
+            className="border border-white text-white bg-transparent p-2 rounded "
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           <select
-            className="border p-2 rounded "
+            className="border border-white bg-transparent p-2 rounded "
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
@@ -123,7 +123,7 @@ const CreateUser = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 border text-white py-2 rounded hover:bg-blue-700"
+            className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 border border-white text-white py-2 rounded hover:bg-blue-700"
           >
             {loading ? "Creating..." : "Create User"}
           </button>
