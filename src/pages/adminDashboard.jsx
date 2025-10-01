@@ -16,7 +16,7 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -205,8 +205,8 @@ const AdminDashboard = () => {
       {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden p-2"
-          onClick={() => setSidebarOpen(true)}
+          className="fixed inset-0  bg-opacity-50 z-40 md:hidden p-2"
+          onClick={() => setSidebarOpen(false)}
         />
       )}
 
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="flex justify-between items-center  shadow px-4 py-2">
-          <div className="mt-6  ">
+          <div className="mt-6 ">
             <SearchBar onSearch={handleSearch} suggestions={suggestions} />
             {results.length === 0 ? (
               <p className="text-gray-500"></p>
@@ -225,8 +225,17 @@ const AdminDashboard = () => {
                     key={item._id || item.id}
                     className="p-2 cursor-pointer hover:bg-sky-700"
                   >
-                    {item.name || item.title} –{" "}
-                    {item.category || "Task/Project"}
+                    <Link
+                      to={
+                        item.category === "project"
+                          ? `/projects/:id${item._id}`
+                          : `/taskDetail/:id${item._id}`
+                      }
+                      className="block w-full"
+                    >
+                      {item.name || item.title} –{" "}
+                      {item.category || "Task/Project"}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -265,7 +274,7 @@ const AdminDashboard = () => {
 
           {/* Tasks + chart */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
-            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
+            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96  overflow-y-auto">
               <h3 className="text-lg font-semibold mb-3">Tasks</h3>
               <ul className="divide-y">
                 {tasks.map((t) => (

@@ -99,7 +99,7 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 text-cyan-50">
+    <div className="flex h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
       {/* Sidebar */}
       <aside
         className={`fixed md:static inset-y-0 left-0 transform ${
@@ -156,7 +156,7 @@ const UsersPage = () => {
       </aside>
       {/* Page Header */}
       <div className="flex flex-col flex-1">
-        <header className="flex flex-col sm:flex-row justify-between items-center bg-white text-black shadow px-4 py-3 gap-3">
+        <header className="flex flex-col sm:flex-row justify-between items-center  text-black shadow px-4 py-3 gap-3">
           <Link
             to="/adminDashboard"
             className="text-2xl font-bold flex items-center gap-2 text-sky-700"
@@ -165,7 +165,7 @@ const UsersPage = () => {
           </Link>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="flex items-center bg-gray-100 px-2 rounded w-full">
+            <div className="flex items-center border border-white  px-2 rounded w-full">
               <Search size={18} className="text-gray-500" />
               <input
                 type="text"

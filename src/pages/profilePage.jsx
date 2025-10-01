@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowBigLeft } from "lucide-react";
 
 const parseJwt = (token) => {
   try {
@@ -103,55 +104,66 @@ const ProfilePage = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded">
-      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
-
-      {/* Update Name */}
-      <input
-        type="text"
-        value={user?.firstName || ""}
-        onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-        className="border p-2 rounded w-full mb-3 "
-      />
-      {/* Update Name */}
-      <input
-        type="text"
-        value={user?.lastName || ""}
-        onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-        className="border p-2 rounded w-full mb-3 "
-      />
-
-      {/* Email - read only */}
-      <input
-        type="email"
-        value={user?.email || ""}
-        disabled
-        className="border p-2 rounded w-full mb-3  "
-      />
-
-      {/* Change Password */}
-      <input
-        type="password"
-        placeholder="New Password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        className="border p-2 rounded w-full mb-3 "
-      />
-
-      <input
-        type="password"
-        placeholder="Confirm New Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2 rounded w-full mb-3 "
-      />
-
-      <button
-        onClick={handleUpdate}
-        className="bg-sky-700 text-white py-2 px-4 rounded hover:bg-blue-700"
+    <div className="min-h-screen bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 ">
+      <span
+        className="p-4 text-cyan-50  flex items-start"
+        onClick={() => window.history.back()}
       >
-        Save Changes
-      </button>
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center items-center bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover min-h-screen">
+        <div className=" p-6 max-w-md mx-auto bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded">
+          <h1 className="text-2xl font-bold mb-4 text-white">My Profile</h1>
+
+          {/* Update Name */}
+          <input
+            type="text"
+            value={user?.firstName || ""}
+            onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+            className="border border-white text-white p-2 rounded w-full mb-3 "
+          />
+          {/* Update Name */}
+          <input
+            type="text"
+            value={user?.lastName || ""}
+            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+            className="border border-white text-white p-2 rounded w-full mb-3 "
+          />
+
+          {/* Email - read only */}
+          <input
+            type="email"
+            value={user?.email || ""}
+            disabled
+            className="border border-white text-white p-2 rounded w-full mb-3  "
+          />
+
+          {/* Change Password */}
+          <input
+            type="password"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="border border-white text-white p-2 rounded w-full mb-3 "
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm New Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="border text-white border-white p-2 rounded w-full mb-3 "
+          />
+
+          <button
+            onClick={handleUpdate}
+            className="
+            self-end border border-white bg-sky-700 text-white py-2 px-4 rounded hover:bg-blue-700"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
