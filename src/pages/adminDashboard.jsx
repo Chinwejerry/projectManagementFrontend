@@ -145,7 +145,7 @@ const AdminDashboard = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="flex h-screen bg-gray-100 text-cyan-50">
+    <div className="flex h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
       {/* Sidebar */}
       <aside
         className={`fixed md:static inset-y-0 left-0 transform ${
@@ -214,16 +214,16 @@ const AdminDashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="flex justify-between items-center  shadow px-4 py-2">
-          <SearchBar onSearch={handleSearch} suggestions={suggestions} />
-          <div className="mt-6">
+          <div className="mt-6  ">
+            <SearchBar onSearch={handleSearch} suggestions={suggestions} />
             {results.length === 0 ? (
-              <p>No results yet.</p>
+              <p className="text-gray-500"></p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="absolute left-0 right-0 mt-1 bg-sky-700 border border-gray-200 rounded-xl shadow z-10 max-h-48 overflow-y-auto p-4 ml-65">
                 {results.map((item) => (
                   <li
                     key={item._id || item.id}
-                    className="p-2 border rounded-xl"
+                    className="p-2 cursor-pointer hover:bg-sky-700"
                   >
                     {item.name || item.title} –{" "}
                     {item.category || "Task/Project"}
@@ -252,7 +252,7 @@ const AdminDashboard = () => {
         {/* Page content */}
         <main className="flex-1 p-6 space-y-6 overflow-y-auto">
           {/* Total statistics */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold">Total Projects</h3>
               <p className="text-2xl font-bold">{projects.length}</p>
@@ -264,7 +264,7 @@ const AdminDashboard = () => {
           </div>
 
           {/* Tasks + chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
               <h3 className="text-lg font-semibold mb-3">Tasks</h3>
               <ul className="divide-y">
@@ -290,7 +290,7 @@ const AdminDashboard = () => {
             </div>
           </div>
           {/* Projects + chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-0">
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96 overflow-y-auto">
               <h3 className="text-lg font-semibold mb-3">Projects</h3>
               <ul className="divide-y">
