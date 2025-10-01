@@ -59,16 +59,16 @@ const Login = () => {
     <div className="flex justify-center items-center min-h-screen bg-[url(images/1.png)] bg-no-repeat bg-center bg-cover p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-80 flex flex-col gap-4"
+        className=" bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow rounded-lg p-6 w-80 flex flex-col gap-4"
       >
-        <h1 className="text-xl font-bold">Login</h1>
+        <h1 className="text-xl font-bold text-white">Login</h1>
 
         {error && <p className="text-red-500">{error}</p>}
 
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 rounded "
+          className="border border-white  p-2 rounded  "
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -77,7 +77,7 @@ const Login = () => {
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 rounded "
+          className="border border-white p-2 rounded "
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -86,7 +86,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="border bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 py-2 rounded hover:bg-blue-700"
+          className="border border-white text-white bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 py-2 rounded hover:bg-blue-700"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
