@@ -1,3 +1,4 @@
+//usersPage.jsx
 import { useState, useEffect } from "react";
 import {
   Search,
@@ -20,7 +21,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(true); // state for loading
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   // state for errors
 
   // Fetch users from backend API (mock example)
