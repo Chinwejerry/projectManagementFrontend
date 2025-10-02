@@ -1,4 +1,3 @@
-//usersPage.jsx
 import { useState, useEffect } from "react";
 import {
   Search,
@@ -10,25 +9,23 @@ import {
   Folder,
   Users,
   ClipboardList,
-  Settings,
   X,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const UsersPage = () => {
-  const [users, setUsers] = useState([]); // state for users
-  const [search, setSearch] = useState(""); // state for search
-  const [loading, setLoading] = useState(true); // state for loading
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-  // state for errors
 
-  // Fetch users from backend API (mock example)
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("token"); // after login, store it here
+        const token = localStorage.getItem("token");
         const response = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/users",
           {
@@ -57,9 +54,7 @@ const UsersPage = () => {
 
     fetchUsers();
   }, []);
-  // runs only once on component mount
 
-  // Filter users based on search query
   const filteredUsers = users.filter(
     (user) =>
       (user.firstName?.toLowerCase() || "").includes(search.toLowerCase()) ||
@@ -67,9 +62,7 @@ const UsersPage = () => {
       (user.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
       (user.role?.toLowerCase() || "").includes(search.toLowerCase())
   );
-  // Handle loading and errors
-  if (loading) return <p className="p-4">Loading users...</p>;
-  if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
+
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
@@ -91,12 +84,14 @@ const UsersPage = () => {
         throw new Error(data.message || "Failed to delete user");
       }
 
-      // Remove from state without refetch
       setUsers((prev) => prev.filter((user) => user._id !== id));
     } catch (error) {
       alert(error.message);
     }
   };
+
+  if (loading) return <p className="p-4">Loading users...</p>;
+  if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
     <div className="flex h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
@@ -114,8 +109,8 @@ const UsersPage = () => {
           </button>
         </div>
 
-        <h1 className="hidden md:block text-2xl font-bold mb-6"> Admin</h1>
-        <nav className="flex flex-col space-y-2 ">
+        <h1 className="hidden md:block text-2xl font-bold mb-6">Admin</h1>
+        <nav className="flex flex-col space-y-2">
           <Link
             to="/adminDashboard"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
@@ -160,9 +155,10 @@ const UsersPage = () => {
           </Link>
         </nav>
       </aside>
+
       {/* Page Header */}
       <div className="flex flex-col flex-1">
-        <header className="flex flex-col sm:flex-row justify-between items-center  text-black shadow px-4 py-3 gap-3">
+        <header className="flex flex-col sm:flex-row justify-between items-center text-black shadow px-4 py-3 gap-3">
           <Link
             to="/adminDashboard"
             className="text-2xl font-bold flex items-center gap-2 text-sky-700"
@@ -171,7 +167,7 @@ const UsersPage = () => {
           </Link>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="flex items-center border border-white  px-2 rounded w-full">
+            <div className="flex items-center border border-white px-2 rounded w-full">
               <Search size={18} className="text-gray-500" />
               <input
                 type="text"
@@ -191,65 +187,56 @@ const UsersPage = () => {
             )}
           </div>
         </header>
+
         {/* Users Table */}
         <main className="p-4 flex-1 overflow-y-auto">
           <div className="overflow-x-auto">
             <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 shadow rounded">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>First Name</th>
                   <th>Last Name</th>
                   <th>Email</th>
                   <th>Role</th>
-                  <th>Status</th>
+                  <th>Skills</th>
+                  <th>Weekly Capacity</th>
+                  <th>Skill Level</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
+                {filteredUsers.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="text-center py-4">
+                      No users found.
+                    </td>
+                  </tr>
+                )}
                 {filteredUsers.map((user) => (
                   <tr key={user._id}>
                     <td>{user.firstName}</td>
                     <td>{user.lastName}</td>
                     <td>{user.email}</td>
                     <td>{user.role}</td>
-                    <td>
-                      <span
-                        className={`badge ${
-                          user.status === "Active"
-                            ? "badge-primary"
-                            : "badge-accent"
-                        }`}
-                      >
-                        {user.status}
-                      </span>
-                    </td>
+                    <td>{user.technicalSkills?.join(", ")}</td>
+                    <td>{user.weeklyCapacityHours}</td>
+                    <td>{user.skillLevel}</td>
                     <td className="flex gap-2">
-                      {/* <button className="btn btn-sm btn-outline btn-success flex items-center gap-1">
-                      <Edit size={14} /> Edit
-                    </button> */}
                       <Link
                         to={`/edit/${user._id}`}
                         className="btn btn-sm btn-outline btn-success flex items-center gap-1"
                       >
                         <Edit size={14} /> Edit
                       </Link>
-
-                      <Link
+                      <button
                         className="btn btn-sm btn-outline btn-error flex items-center gap-1"
                         onClick={() => handleDelete(user._id)}
                       >
                         <Trash2 size={14} /> Delete
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}
-                {filteredUsers.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="text-center py-4">
-                      No users found.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
