@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { ArrowBigLeft } from "lucide-react";
+
 Modal.setAppElement("#root");
 
 const MessagePage = () => {
@@ -26,6 +27,8 @@ const MessagePage = () => {
         "https://projectmanegerbackend-1.onrender.com/api/messages/inbox",
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      if (!inboxRes.ok)
+        throw new Error(`Inbox fetch failed: ${inboxRes.status}`);
       const inboxData = await inboxRes.json();
       setInbox(Array.isArray(inboxData) ? inboxData : []);
 
@@ -34,6 +37,8 @@ const MessagePage = () => {
           "https://projectmanegerbackend-1.onrender.com/api/messages/sent",
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        if (!sentRes.ok)
+          throw new Error(`Sent fetch failed: ${sentRes.status}`);
         const sentData = await sentRes.json();
         setSent(Array.isArray(sentData) ? sentData : []);
       }
@@ -52,22 +57,21 @@ const MessagePage = () => {
           "https://projectmanegerbackend-1.onrender.com/api/projects",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const projectsData = await projectsRes.json();
+        const projectsData = projectsRes.ok ? await projectsRes.json() : [];
         setProjects(Array.isArray(projectsData) ? projectsData : []);
 
         const usersRes = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/users",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const usersData = await usersRes.json();
+        const usersData = usersRes.ok ? await usersRes.json() : [];
         setUsers(Array.isArray(usersData) ? usersData : []);
       } else {
-        // role user -> fetch only other users with role user
         const usersRes = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/users/onlyUsers",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const usersData = await usersRes.json();
+        const usersData = usersRes.ok ? await usersRes.json() : [];
         setUsers(Array.isArray(usersData) ? usersData : []);
       }
     } catch (err) {
@@ -83,7 +87,7 @@ const MessagePage = () => {
   async function handleSendMessage(e) {
     e.preventDefault();
     try {
-      if (role === "user") return; // users cannot send messages
+      if (role === "user") return;
 
       let url = "https://projectmanegerbackend-1.onrender.com/api/messages/";
       const body = { content };
@@ -122,14 +126,14 @@ const MessagePage = () => {
   if (loading) return <p>Loading messages...</p>;
 
   return (
-    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  ">
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
       <span
-        className="p-4 text-cyan-50  flex items-start"
+        className="p-4 text-cyan-50 flex items-start"
         onClick={() => window.history.back()}
       >
         <ArrowBigLeft />
       </span>
-      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen  bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
+      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
         <h1 className="text-2xl font-bold mb-4 text-sky-700">Messages</h1>
 
         <div className="flex gap-4 mb-4">
@@ -161,67 +165,76 @@ const MessagePage = () => {
           )}
         </div>
 
-        <div>
-          {activeTab === "inbox" &&
-            (inbox.length ? (
-              <ul className="space-y-2">
-                {inbox.map((msg) => (
-                  <li key={msg._id} className="border p-2 rounded">
-                    <strong>From:</strong> {msg.sender.firstName}{" "}
-                    {msg.sender.lastName} <br />
-                    <strong>Type:</strong> {msg.type} <br />
-                    <strong>Content:</strong> {msg.content} <br />
-                    {msg.type === "project" && (
-                      <small>
-                        Project:{" "}
-                        {msg.project?.name ||
-                          projects.find(
-                            (p) => p._id === (msg.project?._id || msg.project)
-                          )?.name ||
-                          "Unknown"}
-                      </small>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No inbox messages</p>
-            ))}
+        {/* Inbox */}
+        {activeTab === "inbox" &&
+          (inbox.length ? (
+            <ul className="space-y-2">
+              {inbox.map((msg) => (
+                <li key={msg._id} className="border p-2 rounded">
+                  <strong>From:</strong> {msg.sender?.firstName || "Unknown"}{" "}
+                  {msg.sender?.lastName || ""} <br />
+                  <strong>Type:</strong> {msg.type} <br />
+                  <strong>Content:</strong> {msg.content} <br />
+                  {msg.type === "project" && (
+                    <small>
+                      Project:{" "}
+                      {msg.project?.name ||
+                        projects.find(
+                          (p) => p._id === (msg.project?._id || msg.project)
+                        )?.name ||
+                        "Unknown"}
+                    </small>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No inbox messages</p>
+          ))}
 
-          {activeTab === "sent" &&
-            role === "admin" &&
-            (sent.length ? (
-              <ul className="space-y-2">
-                {sent.map((msg) => (
+        {/* Sent */}
+        {activeTab === "sent" &&
+          role === "admin" &&
+          (sent.length ? (
+            <ul className="space-y-2">
+              {sent.map((msg) => {
+                const recipientName = msg.recipient
+                  ? `${msg.recipient?.firstName || ""} ${
+                      msg.recipient?.lastName || ""
+                    }`.trim()
+                  : "Unknown";
+
+                const projectName =
+                  msg.project?.name ||
+                  projects.find(
+                    (p) => p._id === (msg.project?._id || msg.project)
+                  )?.name ||
+                  "Unknown";
+
+                let toDisplay = "All Users";
+                if (msg.type === "direct") toDisplay = recipientName;
+                else if (msg.type === "project")
+                  toDisplay = `Project: ${projectName}`;
+
+                return (
                   <li key={msg._id} className="border p-2 rounded">
-                    <strong>To:</strong>{" "}
-                    {msg.type === "direct"
-                      ? `${msg.recipient.firstName} ${msg.recipient.lastName}`
-                      : msg.type === "project"
-                      ? `Project: ${
-                          projects.find(
-                            (p) => p._id === (msg.project?._id || msg.project)
-                          )?.name || "Unknown"
-                        }`
-                      : "All Users"}
-                    <br />
+                    <strong>To:</strong> {toDisplay} <br />
                     <strong>Type:</strong> {msg.type} <br />
                     <strong>Content:</strong> {msg.content}
                   </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No sent messages</p>
-            ))}
-        </div>
+                );
+              })}
+            </ul>
+          ) : (
+            <p>No sent messages</p>
+          ))}
 
         {/* Modal */}
-        <div className="bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover"></div>
         {role === "admin" && (
           <Modal
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
-            className=" p-6 rounded shadow-lg max-w-md mx-auto mt-20 "
+            className="p-6 rounded shadow-lg max-w-md mx-auto mt-20"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start"
           >
             <h2 className="text-xl font-bold mb-4 text-white">New Message</h2>
@@ -269,7 +282,7 @@ const MessagePage = () => {
               )}
 
               <textarea
-                className="border   p-2 rounded"
+                className="border p-2 rounded"
                 placeholder="Message content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
