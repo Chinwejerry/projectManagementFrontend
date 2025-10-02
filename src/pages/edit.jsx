@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { ArrowBigLeft } from "lucide-react";
 
 const EditUserPage = () => {
   const { id } = useParams(); // user id from URL
@@ -80,72 +81,80 @@ const EditUserPage = () => {
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50   hover:bg-blue-700k p-6 rounded-2xl shadow w-full max-w-lg">
-        <h1 className="text-2xl font-bold mb-4">Edit User</h1>
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 ">
+      <span
+        className="p-4 text-cyan-50  flex items-start"
+        onClick={() => window.history.back()}
+      >
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50   hover:bg-blue-700k p-6 rounded-2xl shadow w-full max-w-lg">
+          <h1 className="text-2xl font-bold mb-4">Edit User</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4 ">
-          <div>
-            <label className="block text-sm font-medium">First Name</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full border rounded p-2  "
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4 ">
+            <div>
+              <label className="block text-sm font-medium">First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full border rounded p-2  "
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium">Last Name</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full border  rounded p-2"
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full border  rounded p-2"
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium">
-              Email (read-only)
-            </label>
-            <input
-              type="email"
-              value={email}
-              disabled
-              className="w-full border rounded p-2  cursor-not-allowed"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium">
+                Email (read-only)
+              </label>
+              <input
+                type="email"
+                value={email}
+                disabled
+                className="w-full border rounded p-2  cursor-not-allowed"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full border rounded  p-2"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-medium">Role</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full border rounded  p-2"
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
 
-          <div className="flex justify-between">
-            <Link
-              to="/usersPage"
-              className="px-4 py-2 rounded bg-sky-700 hover:bg-gray-400"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              className="px-4   bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 py-2 rounded  text-white hover:bg-blue-700"
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-between">
+              <Link
+                to="/usersPage"
+                className="px-4 py-2 rounded bg-sky-700 hover:bg-gray-400"
+              >
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                className="px-4   bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50 py-2 rounded  text-white hover:bg-blue-700"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

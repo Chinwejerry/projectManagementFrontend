@@ -94,6 +94,12 @@ const Projects = () => {
             <ClipboardList size={18} /> Messages
           </Link>
           <Link
+            to="/ai-report"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <ClipboardList size={18} /> AI Report
+          </Link>
+          <Link
             to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
