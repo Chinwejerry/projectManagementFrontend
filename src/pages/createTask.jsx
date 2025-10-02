@@ -11,6 +11,7 @@ const CreateTask = () => {
   const [dueDate, setDueDate] = useState("");
   const [types, setTypes] = useState("");
   const [status, setStatus] = useState("");
+  const [estimatedDurationHours, setEstimatedDurationHours] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -110,6 +111,9 @@ const CreateTask = () => {
             dueDate,
             types,
             status,
+            estimatedDurationHours: estimatedDurationHours
+              ? Number(estimatedDurationHours)
+              : undefined,
           }),
         }
       );
@@ -238,6 +242,15 @@ const CreateTask = () => {
             className="border border-white bg-transparent text-white p-2 rounded"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+          />
+
+          <input
+            type="number"
+            min="0"
+            placeholder="Estimated Hours"
+            className="border border-white bg-transparent text-white p-2 rounded"
+            value={estimatedDurationHours}
+            onChange={(e) => setEstimatedDurationHours(e.target.value)}
           />
 
           <button

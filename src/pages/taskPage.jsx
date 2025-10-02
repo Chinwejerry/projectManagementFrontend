@@ -170,10 +170,7 @@ const TaskPage = () => {
                     Due: {task.dueDate ? task.dueDate.slice(0, 10) : "N/A"}
                   </p>
                   <p className="text-gray-300 mb-3">
-                    Estimated Hours:
-                    {task.estimatedDurationHours
-                      ? task.dueDate.slice(0, 10)
-                      : "N/A"}
+                    Estimated Hours: {task.estimatedDurationHours ?? "N/A"}
                   </p>
                   <span
                     className={` w-28 self-end badge ${
