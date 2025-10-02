@@ -33,6 +33,8 @@ const ProjectDetails = () => {
           name: data.name,
           description: data.description,
           status: data.status,
+          startDate: data.startDate,
+          dueDate: data.dueDate,
           members: data.members.map((m) => m._id),
         });
       } catch (error) {
@@ -125,8 +127,11 @@ const ProjectDetails = () => {
       >
         <ArrowBigLeft />
       </span>
-      <div className="flex flex-col min-h-screen bg-gray-100 p-4">
-        <div className=" text-white bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded p-6 mb-6">
+      <div className="flex flex-col min-h-screen bg-gray-100 p-4 space-y-3">
+        <div
+          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6  flex flex-col gap-4
+      "
+        >
           {editing ? (
             <div className="flex flex-col gap-3">
               <input
@@ -261,7 +266,10 @@ const ProjectDetails = () => {
         </div>
 
         {/* Tasks List */}
-        <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow rounded p-6">
+        <div
+          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6  flex flex-col gap-4
+      "
+        >
           <h2 className="text-xl font-bold mb-4 text-white">Tasks</h2>
           {tasks.length === 0 ? (
             <p>No tasks for this project.</p>
