@@ -57,7 +57,7 @@ const TaskPage = () => {
 
   return (
     <div className="flex h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
-      <div className="flex h-screen b text-white">
+      <div className="flex h-screen b text-white w-screen">
         {/* Sidebar */}
         <aside
           className={`fixed md:static inset-y-0 left-0 transform ${
@@ -145,7 +145,7 @@ const TaskPage = () => {
           </header>
 
           {/* Main content */}
-          <main className="p-4 flex-1 overflow-y-auto">
+          <main className="p-4 flex-1 overflow-y-auto ">
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredTasks.length === 0 && (
                 <p className="text-center col-span-full"></p>
@@ -159,21 +159,27 @@ const TaskPage = () => {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h2 className="font-semibold text-lg">{task.title}</h2>
-                    <span
-                      className={` w-28 badge ${
-                        task.status === "completed"
-                          ? "badge-accent"
-                          : task.status === "in-progress"
-                          ? "badge-primary"
-                          : "badge-secondary"
-                      }`}
-                    >
-                      {task.status}
-                    </span>
                   </div>
                   <p className="text-gray-300 mb-3">
                     Due: {task.dueDate ? task.dueDate.slice(0, 10) : "N/A"}
                   </p>
+                  <p className="text-gray-300 mb-3">
+                    Estimated Hours:
+                    {task.estimatedDurationHours
+                      ? task.dueDate.slice(0, 10)
+                      : "N/A"}
+                  </p>
+                  <span
+                    className={` w-28 self-end badge ${
+                      task.status === "completed"
+                        ? "badge-accent"
+                        : task.status === "in-progress"
+                        ? "badge-primary"
+                        : "badge-secondary"
+                    }`}
+                  >
+                    {task.status}
+                  </span>
                 </div>
               ))}
             </div>
