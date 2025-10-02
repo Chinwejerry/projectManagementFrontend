@@ -9,7 +9,7 @@ const CreateTask = () => {
   const [assignedTo, setAssignedTo] = useState("");
   const [priority, setPriority] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [startDate, setStartDate] = useState("");
+
   const [types, setTypes] = useState("");
   const [status, setStatus] = useState("");
   const [estimatedDurationHours, setEstimatedDurationHours] = useState("");
@@ -90,7 +90,7 @@ const CreateTask = () => {
     try {
       if (!token) {
         alert("Please log in first");
-        navigate("/login");
+        navigate("/");
         setLoading(false);
         return;
       }
@@ -109,8 +109,7 @@ const CreateTask = () => {
             projectId,
             assignedTo,
             priority,
-            dueDate,
-            startDate,
+
             types,
             status,
             estimatedDurationHours: estimatedDurationHours
@@ -239,12 +238,6 @@ const CreateTask = () => {
             <option value="high">High</option>
           </select>
 
-          <input
-            type="date"
-            className="border border-white bg-transparent text-white p-2 rounded"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
           <input
             type="date"
             className="border border-white bg-transparent text-white p-2 rounded"

@@ -32,6 +32,7 @@ const Projects = () => {
             },
           }
         );
+        console.log("Fetched projects:", data);
         setProjects(data);
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -158,13 +159,18 @@ const Projects = () => {
                   <h2 className="font-semibold text-lg">{project.name}</h2>
                 </div>
                 <p className="text-gray-300 mb-3">
-                  Start Date:
-                  {project.startDate ? project.startDate.slice(0, 10) : "N/A"}
+                  Start Date:{" "}
+                  {project.startDate
+                    ? new Date(project.startDate).toLocaleDateString()
+                    : "N/A"}
                 </p>
                 <p className="text-gray-300 mb-3">
-                  End Date:
-                  {project.endDate ? project.endDate.slice(0, 10) : "N/A"}
+                  End Date:{" "}
+                  {project.endDate
+                    ? new Date(project.endDate).toLocaleDateString()
+                    : "N/A"}
                 </p>
+
                 <span
                   className={` w-28 self-end badge ${
                     project.status === "completed"
