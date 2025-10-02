@@ -143,6 +143,9 @@ const Projects = () => {
                   <th className="text-center">Status</th>
                   <th className="text-center">Created At</th>
                   <th className="text-left">Created By</th>
+                  <th className="text-left">Start Date</th>
+                  <th className="text-left">End Date</th>
+                  <th className="text-left">Estimated Hours</th>
                 </tr>
               </thead>
               <tbody>
