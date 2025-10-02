@@ -10,14 +10,14 @@ export default function AIReport() {
     setError("");
     setReport("");
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // توکن JWT برای احراز هویت یوزر
 
     try {
       const res = await fetch("http://localhost:5000/api/ai/report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // فقط برای بک‌اند
         },
       });
 
