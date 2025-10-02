@@ -13,13 +13,16 @@ export default function AIReport() {
     const token = localStorage.getItem("token"); // توکن JWT برای احراز هویت یوزر
 
     try {
-      const res = await fetch("http://localhost:5000/api/ai/report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // فقط برای بک‌اند
-        },
-      });
+      const res = await fetch(
+        "https://projectmanegerbackend-1.onrender.com/api/ai/report",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // فقط برای بک‌اند
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to generate report");
 
