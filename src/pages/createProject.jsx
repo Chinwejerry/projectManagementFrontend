@@ -6,7 +6,7 @@ const CreateProject = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [members, setMembers] = useState([]);
+  //const [members, setMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -45,13 +45,13 @@ const CreateProject = () => {
     fetchUsers();
   }, []);
 
-  const handleMemberChange = (e) => {
-    const value = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setSelectedMembers(value);
-  };
+  // const handleMemberChange = (e) => {
+  //   const value = Array.from(
+  //     e.target.selectedOptions,
+  //     (option) => option.value
+  //   );
+  //   setSelectedMembers(value);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
