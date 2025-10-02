@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   Plus,
@@ -17,6 +18,7 @@ const Projects = () => {
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -140,9 +142,43 @@ const Projects = () => {
         </header>
 
         {/* Projects List */}
-        <main className="p-4 flex-1 overflow-y-auto">
-          <div className="overflow-x-auto ">
-            <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  shadow rounded text-left">
+        <main className="p-4 flex-1 overflow-y-auto ">
+          <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredProjects.length === 0 && (
+              <p className="text-center col-span-full"></p>
+            )}
+
+            {filteredProjects.map((project) => (
+              <div
+                key={project._id}
+                className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50 shadow p-4 flex flex-col justify-between cursor-pointer hover:bg-gray-50"
+                onClick={() => navigate(`/projects/${project._id}`)}
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <h2 className="font-semibold text-lg">{project.name}</h2>
+                </div>
+                <p className="text-gray-300 mb-3">
+                  Start Date:
+                  {project.startDate ? project.startDate.slice(0, 10) : "N/A"}
+                </p>
+                <p className="text-gray-300 mb-3">
+                  End Date:
+                  {project.endDate ? project.endDate.slice(0, 10) : "N/A"}
+                </p>
+                <span
+                  className={` w-28 self-end badge ${
+                    project.status === "completed"
+                      ? "badge-accent"
+                      : project.status === "in-progress"
+                      ? "badge-primary"
+                      : "badge-secondary"
+                  }`}
+                >
+                  {project.status}
+                </span>
+              </div>
+            ))}
+            {/* <table className="table w-full bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  shadow rounded text-left">
               <thead>
                 <tr className="text-white">
                   <th className="text-left">Project Name</th>
@@ -197,7 +233,7 @@ const Projects = () => {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </table> */}
           </div>
         </main>
       </div>

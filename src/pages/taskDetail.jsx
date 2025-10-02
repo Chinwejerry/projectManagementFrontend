@@ -40,9 +40,9 @@ const TaskDetail = () => {
       >
         <ArrowBigLeft />
       </span>
-      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen  bg-gray-100 p-4">
+      <div className="flex flex-col space-y-3 items-center min-h-screen  bg-gray-100 p-6">
         <div
-          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6 w- flex flex-col gap-4
+          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6  flex flex-col gap-4
       "
         >
           <h1 className="text-2xl font-bold">{task.title}</h1>
