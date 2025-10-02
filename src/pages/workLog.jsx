@@ -61,7 +61,7 @@ const WorklogForm = () => {
             <input
               type="text"
               placeholder="Comment"
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full border-white text-white"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               required
@@ -71,7 +71,7 @@ const WorklogForm = () => {
             <input
               type="number"
               placeholder="Spent Time (hours)"
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full border-white text-white"
               value={spentTime}
               onChange={(e) => setSpentTime(e.target.value)}
               required
@@ -82,7 +82,7 @@ const WorklogForm = () => {
               value={statusChange}
               onChange={(e) => setStatusChange(e.target.value)}
               placeholder="Status Change (optional)"
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full border-white text-white"
             >
               <option value="">Select Status (optional)</option>
               <option value="pending">pending</option>
@@ -95,10 +95,13 @@ const WorklogForm = () => {
             <input
               type="file"
               onChange={(e) => setFile(e.target.files[0])}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full border-white text-white"
             />
           </div>
-          <button type="submit" className="btn btn-primary w-full">
+          <button
+            type="submit"
+            className="btn bg-sky-700 border border-white w-full"
+          >
             Submit Worklog
           </button>
         </form>
