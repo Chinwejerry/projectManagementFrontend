@@ -139,7 +139,7 @@ const MessagePage = () => {
         <div className="flex gap-4 mb-4">
           <button
             className={`px-4 py-2 rounded ${
-              activeTab === "inbox" ? "bg-blue-600 text-white" : "bg-gray-300"
+              activeTab === "inbox" ? "bg-sky-700 text-white" : "bg-gray-300"
             }`}
             onClick={() => setActiveTab("inbox")}
           >
@@ -148,7 +148,7 @@ const MessagePage = () => {
           {role === "admin" && (
             <button
               className={`px-4 py-2 rounded ${
-                activeTab === "sent" ? "bg-blue-600 text-white" : "bg-gray-300"
+                activeTab === "sent" ? "bg-sky-600 text-white" : "bg-gray-700"
               }`}
               onClick={() => setActiveTab("sent")}
             >
@@ -170,7 +170,10 @@ const MessagePage = () => {
           (inbox.length ? (
             <ul className="space-y-2">
               {inbox.map((msg) => (
-                <li key={msg._id} className="border p-2 rounded">
+                <li
+                  key={msg._id}
+                  className="border p-2 rounded border-white bg-sky-300 text-black w-100"
+                >
                   <strong>From:</strong> {msg.sender?.firstName || "Unknown"}{" "}
                   {msg.sender?.lastName || ""} <br />
                   <strong>Type:</strong> {msg.type} <br />
@@ -196,28 +199,28 @@ const MessagePage = () => {
         {activeTab === "sent" &&
           role === "admin" &&
           (sent.length ? (
-            <ul className="space-y-2">
+            <ul className="space-y-2 ">
               {sent.map((msg) => {
                 const recipientName = msg.recipient
-                  ? `${msg.recipient?.firstName || ""} ${
-                      msg.recipient?.lastName || ""
-                    }`.trim()
+                  ? `$
+                  {msg.recipient?.firstName || ""} $
+                  {msg.recipient?.lastName || ""}`.trim()
                   : "Unknown";
-
                 const projectName =
                   msg.project?.name ||
                   projects.find(
                     (p) => p._id === (msg.project?._id || msg.project)
                   )?.name ||
                   "Unknown";
-
                 let toDisplay = "All Users";
                 if (msg.type === "direct") toDisplay = recipientName;
                 else if (msg.type === "project")
                   toDisplay = `Project: ${projectName}`;
-
                 return (
-                  <li key={msg._id} className="border p-2 rounded">
+                  <li
+                    key={msg._id}
+                    className="border p-2 rounded border-white text-black bg-sky-300 w-100"
+                  >
                     <strong>To:</strong> {toDisplay} <br />
                     <strong>Type:</strong> {msg.type} <br />
                     <strong>Content:</strong> {msg.content}
@@ -230,17 +233,18 @@ const MessagePage = () => {
           ))}
 
         {/* Modal */}
+
         {role === "admin" && (
           <Modal
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
-            className="p-6 rounded shadow-lg max-w-md mx-auto mt-20"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start"
+            className="p-6 rounded shadow-lg max-w-md mx-auto mt-20 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800"
+            overlayClassName="fixed inset-0  bg-opacity-50 bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover flex justify-center items-start"
           >
             <h2 className="text-xl font-bold mb-4 text-white">New Message</h2>
             <form onSubmit={handleSendMessage} className="flex flex-col gap-3">
               <select
-                className="border p-2 rounded"
+                className="border p-2 rounded border-white text-white bg-transparent"
                 value={messageType}
                 onChange={(e) => setMessageType(e.target.value)}
               >
@@ -251,7 +255,7 @@ const MessagePage = () => {
 
               {messageType === "project" && (
                 <select
-                  className="border p-2 rounded"
+                  className="border p-2 rounded  border-white text-white bg-transparent"
                   value={projectId}
                   onChange={(e) => setProjectId(e.target.value)}
                   required
@@ -267,7 +271,7 @@ const MessagePage = () => {
 
               {messageType === "direct" && (
                 <select
-                  className="border p-2 rounded"
+                  className="border p-2 rounded  border-white text-white bg-transparent"
                   value={recipientId}
                   onChange={(e) => setRecipientId(e.target.value)}
                   required
@@ -282,7 +286,7 @@ const MessagePage = () => {
               )}
 
               <textarea
-                className="border p-2 rounded"
+                className="border p-2 rounded  border-white text-white bg-transparent"
                 placeholder="Message content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -291,7 +295,7 @@ const MessagePage = () => {
 
               <button
                 type="submit"
-                className="bg-blue-600 text-white py-2 rounded"
+                className="bg-sky-800 text-white py-2 rounded"
               >
                 Send Message
               </button>
