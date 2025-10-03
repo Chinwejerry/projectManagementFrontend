@@ -213,7 +213,7 @@ const UsersPage = () => {
                   </tr>
                 )}
                 {filteredUsers.map((user) => (
-                  <tr key={user._id}>
+                  <tr key={user._id} className="w-10">
                     <td>{user.firstName}</td>
                     <td>{user.lastName}</td>
                     <td>{user.email}</td>

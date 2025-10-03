@@ -13,7 +13,8 @@ const ProjectDetails = () => {
     name: "",
     description: "",
     status: "",
-
+    startDate: "",
+    endDate: "",
     members: [],
   });
   const [allUsers, setAllUsers] = useState([]);
@@ -35,7 +36,7 @@ const ProjectDetails = () => {
           description: data.description,
           status: data.status,
           startDate: data.startDate,
-          dueDate: data.dueDate,
+          endDate: data.endDate,
           members: data.members.map((m) => m._id),
         });
       } catch (error) {
@@ -189,7 +190,7 @@ const ProjectDetails = () => {
                 </button>
                 <button
                   onClick={() => setEditing(false)}
-                  className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                  className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-500"
                 >
                   Cancel
                 </button>
@@ -197,38 +198,42 @@ const ProjectDetails = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <h1 className="text-2xl font-bold text-sky-700">
-                {project.name}
-              </h1>
-              <p>{project.description}</p>
+              <h1 className="text-2xl font-bold text-white">{project.name}</h1>
+              <p className="text-white">{project.description}</p>
               <p>
                 Status:{" "}
                 <span
                   className={`px-2 py-1 rounded text-white ${
                     project.status === "pending"
-                      ? "bg-yellow-500"
+                      ? "bg-pink-500"
                       : project.status === "in-progress"
-                      ? "bg-blue-500"
+                      ? "bg-purple-500"
                       : "bg-green-500"
                   }`}
                 >
                   {project.status}
                 </span>
               </p>
-              <p>
+              <p className="text-white">
                 Created By: {project.createdBy?.firstName}{" "}
                 {project.createdBy?.lastName}
               </p>
-              <p>
+              <p className="text-white">
                 Created At: {new Date(project.createdAt).toLocaleDateString()}
+              </p>
+              <p className="white">
+                Start Date: {new Date(project.startDate).toLocaleDateString()}
+              </p>
+              <p className="white">
+                End Date: {new Date(project.endDate).toLocaleDateString()}
               </p>
 
               <div>
-                <p className="font-semibold">Members:</p>
+                <p className="font-semibold text-white">Members:</p>
                 {project.members && project.members.length > 0 ? (
                   <ul className="list-disc list-inside">
                     {project.members.map((m) => (
-                      <li key={m._id}>
+                      <li key={m._id} className="text-white">
                         {m.firstName} {m.lastName} ({m.email})
                       </li>
                     ))}
