@@ -102,7 +102,7 @@ const EditUserPage = () => {
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
-    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
+    <div className=" bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
       <span
         className="p-4 text-cyan-50 flex items-start"
         onClick={() => window.history.back()}
@@ -111,49 +111,55 @@ const EditUserPage = () => {
       </span>
       <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
         <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50 p-6 rounded-2xl shadow w-full max-w-lg">
-          <h1 className="text-2xl font-bold mb-4">Edit User</h1>
+          <h1 className="text-2xl font-bold mb-4 text-white">Edit User</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">First Name</label>
+              <label className="block text-sm font-medium text-white">
+                First Name
+              </label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full border rounded p-2"
+                className="w-full border rounded p-2 text-white border-white"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium">Last Name</label>
+              <label className="block text-sm font-medium text-white">
+                Last Name
+              </label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full border rounded p-2"
+                className="w-full border rounded p-2  text-white border-white"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium">
+              <label className="block text-sm font-medium text-white">
                 Email (read-only)
               </label>
               <input
                 type="email"
                 value={email}
                 disabled
-                className="w-full border rounded p-2 cursor-not-allowed"
+                className="w-full border rounded p-2 cursor-not-allowed  text-white border-white"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium">Role</label>
+              <label className="block text-sm font-medium text-white">
+                Role
+              </label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full border rounded p-2"
+                className="w-full border rounded p-2  text-white border-white"
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -162,8 +168,8 @@ const EditUserPage = () => {
 
             {/* Technical Skills */}
             <div className="flex flex-col">
-              <label className="mb-1">Technical Skills</label>
-              <div className="flex flex-wrap gap-2">
+              <label className="mb-1 text-white">Technical Skills</label>
+              <div className="flex flex-wrap gap-2  ">
                 {[
                   "tester",
                   "backend programmer",
@@ -186,27 +192,6 @@ const EditUserPage = () => {
             </div>
 
             {/* Weekly Capacity */}
-            <input
-              type="number"
-              placeholder="Weekly Capacity (hours)"
-              className="border border-white text-white bg-transparent p-2 rounded"
-              value={weeklyCapacityHours}
-              onChange={(e) => setWeeklyCapacityHours(Number(e.target.value))}
-              min={1}
-              max={168}
-            />
-
-            {/* Skill Level */}
-            <select
-              className="border border-white bg-transparent p-2 rounded"
-              value={skillLevel}
-              onChange={(e) => setSkillLevel(e.target.value)}
-            >
-              <option value="junior">Junior</option>
-              <option value="mid">Mid</option>
-              <option value="senior">Senior</option>
-              <option value="expert">Expert</option>
-            </select>
 
             <div className="flex justify-between">
               <Link

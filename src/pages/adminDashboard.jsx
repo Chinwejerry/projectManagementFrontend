@@ -299,7 +299,7 @@ const AdminDashboard = () => {
                 ))}
               </ul>
             </div>
-            <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
+            <div className=" card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Task Status</h3>
               <Pie data={taskChartData} />
             </div>
