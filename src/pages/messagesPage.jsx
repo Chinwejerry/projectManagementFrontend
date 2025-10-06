@@ -137,14 +137,16 @@ const MessagePage = () => {
         <h1 className="text-2xl font-bold mb-4 text-sky-700">Messages</h1>
 
         <div className="flex gap-4 mb-4">
-          <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "inbox" ? "bg-sky-700 text-white" : "bg-gray-300"
-            }`}
-            onClick={() => setActiveTab("inbox")}
-          >
-            Inbox
-          </button>
+          {role === "admin" && (
+            <button
+              className={`px-4 py-2 rounded ${
+                activeTab === "sent" ? "bg-sky-600 text-white" : "bg-gray-700"
+              }`}
+              onClick={() => setActiveTab("sent")}
+            >
+              Inbox
+            </button>
+          )}
           {role === "admin" && (
             <button
               className={`px-4 py-2 rounded ${

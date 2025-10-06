@@ -20,6 +20,9 @@ const TaskPage = () => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const navigate = useNavigate();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userName = userInfo ? `${userInfo.firstName}` : "User";
+  const isAdmin = userInfo?.role === "admin";
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -66,16 +69,26 @@ const TaskPage = () => {
               w-64 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50`}
         >
           <div className="flex justify-between items-center mb-6 md:hidden">
-            <h1 className="text-2xl font-bold">Admin</h1>
+            <h1 className="text-2xl font-bold">{userName}</h1>
             <button onClick={() => setSidebarOpen(false)}>
               <X size={24} />
             </button>
           </div>
-
-          <h1 className="hidden md:block text-2xl font-bold mb-6"> Admin</h1>
+          <div className="hidden md:flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">{userName}</h1>
+            <span className="text-sm font-medium">
+              {userInfo?.role === "admin" ? "Admin" : "User"}
+            </span>
+          </div>
           <nav className="flex flex-col space-y-2 ">
             <Link
-              to="/adminDashboard"
+              to={
+                userInfo
+                  ? userInfo.role === "admin"
+                    ? "/adminDashboard"
+                    : "/userDashboard"
+                  : "/login"
+              }
               className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
             >
               <Home size={18} /> Dashboard
@@ -86,12 +99,14 @@ const TaskPage = () => {
             >
               <Folder size={18} /> Projects
             </Link>
-            <Link
-              to="/usersPage"
-              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-            >
-              <Users size={18} /> Users
-            </Link>
+            {isAdmin && (
+              <Link
+                to="/usersPage"
+                className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+              >
+                <Users size={18} /> Users
+              </Link>
+            )}
             <Link
               to="/taskPage"
               className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
@@ -104,12 +119,14 @@ const TaskPage = () => {
             >
               <ClipboardList size={18} /> Messages
             </Link>
-            <Link
-              to="/ai-report"
-              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-            >
-              <ClipboardList size={18} /> AI Report
-            </Link>
+            {isAdmin && (
+              <Link
+                to="/ai-report"
+                className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+              >
+                <ClipboardList size={18} /> AI Report
+              </Link>
+            )}
             <Link
               to="/"
               className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
@@ -122,7 +139,13 @@ const TaskPage = () => {
         <div className="flex flex-col flex-1">
           <header className="flex flex-col sm:flex-row justify-between items-center   shadow px-4 py-3 gap-3">
             <Link
-              to="/adminDashboard"
+              to={
+                userInfo
+                  ? userInfo.role === "admin"
+                    ? "/adminDashboard"
+                    : "/userDashboard"
+                  : "/login"
+              }
               className="text-2xl font-bold flex items-center gap-2 text-sky-700"
             >
               Tasks

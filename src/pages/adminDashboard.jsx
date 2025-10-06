@@ -173,10 +173,21 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        <h1 className="hidden md:block text-2xl font-bold mb-6"> Admin</h1>
+        <div className="hidden md:flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{userName}</h1>
+          <span className="text-sm font-medium">
+            {userInfo?.role === "admin" ? "Admin" : "User"}
+          </span>
+        </div>
         <nav className="flex flex-col space-y-2 ">
           <Link
-            to="/adminDashboard"
+            to={
+              userInfo
+                ? userInfo.role === "admin"
+                  ? "/adminDashboard"
+                  : "/userDashboard"
+                : "/login"
+            }
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
             <Home size={18} /> Dashboard
@@ -304,10 +315,10 @@ const AdminDashboard = () => {
               <h3 className="text-lg font-semibold mb-3">Tasks</h3>
               <ul className="divide-y">
                 {tasks.map((t) => (
-                  <li key={t._id} className="py-2 flex justify-between">
+                  <li key={t._id} className="py-2 flex justify-between gap-4">
                     <span>{t.title}</span>
                     <span
-                      className="px-2 py-1 rounded-full text-sm font-semibold text-grey-800"
+                      className="px-2 py-1 rounded-full text-sm font-semibold text-sky-800 w-30 h-8 flex items-center justify-center"
                       style={{ backgroundColor: statusColors[t.status] }}
                     >
                       {t.status}
@@ -327,10 +338,10 @@ const AdminDashboard = () => {
               <h3 className="text-lg font-semibold mb-3">Projects</h3>
               <ul className="divide-y">
                 {projects.map((p) => (
-                  <li key={p._id} className="py-2 flex justify-between">
+                  <li key={p._id} className="py-2 flex justify-between gap-4">
                     <span>{p.name}</span>
                     <span
-                      className="px-2 py-1 rounded-full text-sm font-semibold text-black"
+                      className="px-2 py-1 rounded-full text-sm font-semibold  text-sky-800 w-30 h-8 flex items-center justify-center"
                       style={{ backgroundColor: statusColors[p.status] }}
                     >
                       {p.status}

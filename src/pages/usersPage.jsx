@@ -21,6 +21,9 @@ const UsersPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userName = userInfo ? `${userInfo.firstName}` : "User";
+  //const isAdmin = userInfo?.role === "admin";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -103,13 +106,18 @@ const UsersPage = () => {
            w-64 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50`}
       >
         <div className="flex justify-between items-center mb-6 md:hidden">
-          <h1 className="text-2xl font-bold">Admin</h1>
+          <h1 className="text-2xl font-bold">{userName}</h1>
           <button onClick={() => setSidebarOpen(false)}>
             <X size={24} />
           </button>
         </div>
 
-        <h1 className="hidden md:block text-2xl font-bold mb-6">Admin</h1>
+        <div className="hidden md:flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{userName}</h1>
+          <span className="text-sm font-medium">
+            {userInfo?.role === "admin" ? "Admin" : "User"}
+          </span>
+        </div>
         <nav className="flex flex-col space-y-2">
           <Link
             to="/adminDashboard"
