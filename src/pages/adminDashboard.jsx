@@ -26,6 +26,7 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [results, setResults] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const [searchFilter, setSearchFilter] = useState("project");
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const userName = userInfo ? `${userInfo.firstName}` : "User";
@@ -52,13 +53,7 @@ const AdminDashboard = () => {
       }
 
       const data = await res.json();
-      console.log("Search response:", data);
-      console.log(
-        "Fetching from:",
-        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`
-      );
-
-      console.log(token);
+      setSearchFilter(filter); // ✅ store which type was searched
       setSuggestions(data);
       setResults(data);
     } catch (error) {
@@ -97,6 +92,11 @@ const AdminDashboard = () => {
 
     fetchData();
   }, [token]);
+  const statusColors = {
+    pending: "#95BDFF", // light blue
+    "in-progress": "#FFC3E7", // pink
+    completed: "#21AA93", // green
+  };
 
   const projectStatusCounts = {
     pending: 0,
@@ -113,6 +113,15 @@ const AdminDashboard = () => {
     backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
   };
   tasks.forEach((t) => taskStatusCounts[t.status]++);
+  const chartOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "#ffffff", // 👈 makes legend text white
+        },
+      },
+    },
+  };
 
   const projectChartData = {
     labels: ["Pending", "In Progress", "Completed"],
@@ -123,7 +132,9 @@ const AdminDashboard = () => {
           projectStatusCounts["in-progress"],
           projectStatusCounts.completed,
         ],
-        backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
+        backgroundColor: Object.values(statusColors),
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
@@ -137,7 +148,9 @@ const AdminDashboard = () => {
           taskStatusCounts["in-progress"],
           taskStatusCounts.completed,
         ],
-        backgroundColor: ["#95BDFF", "#FFC3E7", "#21AA93"],
+        backgroundColor: Object.values(statusColors),
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
@@ -240,9 +253,9 @@ const AdminDashboard = () => {
                   >
                     <Link
                       to={
-                        item.category === "project"
-                          ? `/projects/:id${item._id}`
-                          : `/taskDetail/:id${item._id}`
+                        searchFilter === "project"
+                          ? `/projects/${item._id}`
+                          : `/taskDetail/${item._id}`
                       }
                       className="block w-full"
                     >
@@ -294,11 +307,8 @@ const AdminDashboard = () => {
                   <li key={t._id} className="py-2 flex justify-between">
                     <span>{t.title}</span>
                     <span
-                      className={`badge ${
-                        t.status === "completed"
-                          ? "badge-success"
-                          : "badge-warning"
-                      }`}
+                      className="px-2 py-1 rounded-full text-sm font-semibold text-grey-800"
+                      style={{ backgroundColor: statusColors[t.status] }}
                     >
                       {t.status}
                     </span>
@@ -306,9 +316,9 @@ const AdminDashboard = () => {
                 ))}
               </ul>
             </div>
-            <div className=" card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
+            <div className="text-white card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Task Status</h3>
-              <Pie data={taskChartData} />
+              <Pie data={taskChartData} options={chartOptions} />
             </div>
           </div>
           {/* Projects + chart */}
@@ -320,11 +330,8 @@ const AdminDashboard = () => {
                   <li key={p._id} className="py-2 flex justify-between">
                     <span>{p.name}</span>
                     <span
-                      className={`badge ${
-                        p.status === "completed"
-                          ? "badge-success"
-                          : "badge-warning"
-                      }`}
+                      className="px-2 py-1 rounded-full text-sm font-semibold text-black"
+                      style={{ backgroundColor: statusColors[p.status] }}
                     >
                       {p.status}
                     </span>
@@ -334,7 +341,7 @@ const AdminDashboard = () => {
             </div>
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Project Status</h3>
-              <Pie data={projectChartData} />
+              <Pie data={projectChartData} options={chartOptions} />
             </div>
           </div>
         </main>
