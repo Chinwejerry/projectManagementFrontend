@@ -6,6 +6,8 @@ import {
   Folder,
   Users,
   ClipboardList,
+  Compass,
+  Mail,
   LogOut,
   X,
 } from "lucide-react";
@@ -99,32 +101,34 @@ const TaskPage = () => {
             >
               <Folder size={18} /> Projects
             </Link>
-            {isAdmin && (
-              <Link
-                to="/usersPage"
-                className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-              >
-                <Users size={18} /> Users
-              </Link>
-            )}
+
             <Link
               to="/taskPage"
               className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
             >
               <ClipboardList size={18} /> Tasks
             </Link>
+
+            {isAdmin && (
+              <Link
+                to="/ai-assistant"
+                className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+              >
+                <Compass size={18} /> AI Assistant
+              </Link>
+            )}
             <Link
               to="/messages"
               className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
             >
-              <ClipboardList size={18} /> Messages
+              <Mail size={18} /> Messages
             </Link>
             {isAdmin && (
               <Link
-                to="/ai-report"
+                to="/usersPage"
                 className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
               >
-                <ClipboardList size={18} /> AI Report
+                <Users size={18} /> Users
               </Link>
             )}
             <Link

@@ -16,7 +16,7 @@ import CreateTask from "./pages/createTask.jsx";
 import ProfilePage from "./pages/profilePage";
 import ProjectDetails from "./pages/projectDetails";
 import MessagesPage from "./pages/messagesPage";
-import AIReportPage from "./pages/AIReportPage";
+
 import AIAssistantPage from "./pages/AIAssistantPage.jsx";
 
 function ProtectedRoute({ children, role }) {
@@ -151,14 +151,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/ai-report"
-          element={
-            <ProtectedRoute role="admin">
-              <AIReportPage />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/ai-assistant"
           element={

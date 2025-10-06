@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ArrowBigLeft } from "lucide-react";
 
 const AIAssistantPage = () => {
   const [step, setStep] = useState(0);
@@ -51,7 +52,7 @@ const AIAssistantPage = () => {
     setRiskTasks([]);
 
     if (feature === "managementOverview") {
-      // تولید گزارش Management Overview
+      // Management Overview
       setLoading(true);
       try {
         const res = await fetch(
@@ -155,125 +156,97 @@ const AIAssistantPage = () => {
   };
 
   return (
-    <div className="flex-1 p-6 space-y-6 bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover text-cyan-50">
-      <h1 className="text-2xl font-bold mb-4">AI Assistant</h1>
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
+      <span
+        className="p-4 text-cyan-50 flex items-start"
+        onClick={() => window.history.back()}
+      >
+        <ArrowBigLeft />
+      </span>
+      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
+        <h1 className="text-2xl font-bold mb-4 text-black">AI Assistant</h1>
 
-      {/* Step 0: Feature Selection */}
-      {step === 0 && (
-        <div className="flex flex-col gap-3 max-w-md">
-          <button
-            onClick={() => handleFeatureSelect("managementOverview")}
-            className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
-          >
-            Generate Management Overview
-          </button>
-          <button
-            onClick={() => handleFeatureSelect("suggestTasks")}
-            className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
-          >
-            Suggest New Tasks
-          </button>
-          <button
-            onClick={() => handleFeatureSelect("projectRisk")}
-            className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
-          >
-            Analyze Project Risk
-          </button>
-          <button
-            onClick={() => handleFeatureSelect("userStatus")}
-            className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
-          >
-            Show user Worklogs
-          </button>
-        </div>
-      )}
-
-      {/* Step 1: Select project/user */}
-      {step === 1 && (
-        <div className="flex flex-col gap-3 max-w-md">
-          {["suggestTasks", "projectRisk", "userStatus"].includes(
-            selectedFeature
-          ) && (
-            <select
-              value={selectedProject}
-              onChange={(e) => setSelectedProject(e.target.value)}
-              className="p-2 rounded text-black"
+        {/* Step 0: Feature Selection */}
+        {step === 0 && (
+          <div className="flex flex-col gap-3 max-w-md">
+            <button
+              onClick={() => handleFeatureSelect("managementOverview")}
+              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
             >
-              <option value="">--Select Project--</option>
-              {projects.map((p) => (
-                <option key={p._id} value={p.name}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          )}
-
-          {selectedFeature === "userStatus" && (
-            <select
-              value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
-              className="p-2 rounded text-black"
+              Generate Management Overview
+            </button>
+            <button
+              onClick={() => handleFeatureSelect("suggestTasks")}
+              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
             >
-              <option value="">--Select User--</option>
-              {users.map((u) => (
-                <option key={u._id} value={u._id}>
-                  {u.firstName} {u.lastName}
-                </option>
-              ))}
-            </select>
-          )}
+              Suggest New Tasks
+            </button>
+            <button
+              onClick={() => handleFeatureSelect("projectRisk")}
+              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+            >
+              Analyze Project Risk
+            </button>
+            <button
+              onClick={() => handleFeatureSelect("userStatus")}
+              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+            >
+              Show user Worklogs
+            </button>
+          </div>
+        )}
 
-          <button
-            onClick={handleSend}
-            className="px-6 py-2 bg-sky-600 text-white rounded hover:bg-sky-700 disabled:bg-gray-400"
-          >
-            {loading ? "Thinking..." : "Send"}
-          </button>
-        </div>
-      )}
-
-      {/* Step 2: Show AI Response or Report */}
-      {step === 2 && (
-        <div className="space-y-4 max-w-3xl">
-          {/* Management Overview */}
-          {report && (
-            <div className="space-y-3">
-              {report.split("\n\n").map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
-                >
-                  <pre className="whitespace-pre-wrap">{item}</pre>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Project Risk */}
-          {selectedFeature === "projectRisk" && (
-            <div className="space-y-3">
-              {riskText && (
-                <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left">
-                  <pre className="whitespace-pre-wrap">{riskText}</pre>
-                </div>
-              )}
-              {riskTasks.length > 0 &&
-                riskTasks.map((task, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
-                  >
-                    <pre className="whitespace-pre-wrap">{task}</pre>
-                  </div>
+        {/* Step 1: Select project/user */}
+        {step === 1 && (
+          <div className="flex flex-col gap-3 max-w-md">
+            {["suggestTasks", "projectRisk", "userStatus"].includes(
+              selectedFeature
+            ) && (
+              <select
+                value={selectedProject}
+                onChange={(e) => setSelectedProject(e.target.value)}
+                className="p-2 rounded text-black"
+              >
+                <option value="">--Select Project--</option>
+                {projects.map((p) => (
+                  <option key={p._id} value={p.name}>
+                    {p.name}
+                  </option>
                 ))}
-            </div>
-          )}
+              </select>
+            )}
 
-          {/* Suggested Tasks & User Worklogs */}
-          {["suggestTasks", "userStatus"].includes(selectedFeature) &&
-            aiResponse && (
+            {selectedFeature === "userStatus" && (
+              <select
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className="p-2 rounded text-black"
+              >
+                <option value="">--Select User--</option>
+                {users.map((u) => (
+                  <option key={u._id} value={u._id}>
+                    {u.firstName} {u.lastName}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <button
+              onClick={handleSend}
+              className="px-6 py-2 bg-sky-600 text-white rounded hover:bg-sky-700 disabled:bg-gray-400"
+            >
+              {loading ? "Thinking..." : "Send"}
+            </button>
+          </div>
+        )}
+
+        {/* Step 2: Show AI Response or Report */}
+        {step === 2 && (
+          <div className="space-y-4 max-w-3xl">
+            {/* Management Overview */}
+            {report && (
               <div className="space-y-3">
-                {aiResponse.split("\n\n").map((item, index) => (
+                {report.split("\n\n").map((item, index) => (
                   <div
                     key={index}
                     className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
@@ -284,14 +257,50 @@ const AIAssistantPage = () => {
               </div>
             )}
 
-          <button
-            onClick={() => setStep(0)}
-            className="px-4 py-2 bg-sky-500 rounded text-white"
-          >
-            Back
-          </button>
-        </div>
-      )}
+            {/* Project Risk */}
+            {selectedFeature === "projectRisk" && (
+              <div className="space-y-3">
+                {riskText && (
+                  <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left">
+                    <pre className="whitespace-pre-wrap">{riskText}</pre>
+                  </div>
+                )}
+                {riskTasks.length > 0 &&
+                  riskTasks.map((task, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
+                    >
+                      <pre className="whitespace-pre-wrap">{task}</pre>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {/* Suggested Tasks & User Worklogs */}
+            {["suggestTasks", "userStatus"].includes(selectedFeature) &&
+              aiResponse && (
+                <div className="space-y-3">
+                  {aiResponse.split("\n\n").map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
+                    >
+                      <pre className="whitespace-pre-wrap">{item}</pre>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+            <button
+              onClick={() => setStep(0)}
+              className="px-4 py-2 bg-sky-500 rounded text-white"
+            >
+              Back
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

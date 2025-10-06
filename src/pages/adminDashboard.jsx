@@ -12,6 +12,8 @@ import {
   Settings,
   UserCircle,
   Menu,
+  Compass,
+  Mail,
   X,
   LogOut,
 } from "lucide-react";
@@ -30,6 +32,7 @@ const AdminDashboard = () => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const userName = userInfo ? `${userInfo.firstName}` : "User";
+  const isAdmin = userInfo?.role === "admin";
 
   const handleSearch = async ({ query, filter }) => {
     try {
@@ -198,38 +201,36 @@ const AdminDashboard = () => {
           >
             <Folder size={18} /> Projects
           </Link>
-          <Link
-            to="/usersPage"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <Users size={18} /> Users
-          </Link>
+
           <Link
             to="/taskPage"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
             <ClipboardList size={18} /> Tasks
           </Link>
+
+          {isAdmin && (
+            <Link
+              to="/ai-assistant"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Compass size={18} /> AI Assistant
+            </Link>
+          )}
           <Link
             to="/messages"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
-            <ClipboardList size={18} /> Messages
+            <Mail size={18} /> Messages
           </Link>
-          <Link
-            to="/ai-report"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <ClipboardList size={18} /> AI Report
-          </Link>
-
-          <Link
-            to="/ai-assistant"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <ClipboardList size={18} /> AI Assistant
-          </Link>
-
+          {isAdmin && (
+            <Link
+              to="/usersPage"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Users size={18} /> Users
+            </Link>
+          )}
           <Link
             to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"

@@ -176,7 +176,13 @@ const UserDashboard = () => {
         </div>
         <nav className="flex flex-col space-y-2 )">
           <Link
-            to="/userDashboard"
+            to={
+              userInfo
+                ? userInfo.role === "admin"
+                  ? "/adminDashboard"
+                  : "/userDashboard"
+                : "/login"
+            }
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
             <Home size={18} /> Dashboard
@@ -187,6 +193,28 @@ const UserDashboard = () => {
           >
             <Folder size={18} /> Projects
           </Link>
+
+          <Link
+            to="/taskPage"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <ClipboardList size={18} /> Tasks
+          </Link>
+
+          {isAdmin && (
+            <Link
+              to="/ai-assistant"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Compass size={18} /> AI Assistant
+            </Link>
+          )}
+          <Link
+            to="/messages"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <Mail size={18} /> Messages
+          </Link>
           {isAdmin && (
             <Link
               to="/usersPage"
@@ -195,19 +223,6 @@ const UserDashboard = () => {
               <Users size={18} /> Users
             </Link>
           )}
-          <Link
-            to="/taskPage"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <ClipboardList size={18} /> Tasks
-          </Link>
-
-          <Link
-            to="/messages"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <ClipboardList size={18} /> Messages
-          </Link>
           <Link
             to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
