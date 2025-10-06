@@ -25,8 +25,11 @@ const UserDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [results, setResults] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const [searchFilter, setSearchFilter] = useState("project");
+
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const userName = userInfo ? `${userInfo.firstName}` : "User";
+  const isAdmin = userInfo?.role === "admin";
 
   const handleSearch = async ({ query, filter }) => {
     try {
@@ -50,13 +53,7 @@ const UserDashboard = () => {
       }
 
       const data = await res.json();
-      console.log("Search response:", data);
-      console.log(
-        "Fetching from:",
-        `https://projectmanegerbackend-1.onrender.com/api/${endpoint}/find?query=${query}`
-      );
-
-      console.log(token);
+      setSearchFilter(filter); // ✅ store which type was searched
       setSuggestions(data);
       setResults(data);
     } catch (error) {
@@ -127,6 +124,15 @@ const UserDashboard = () => {
     "in-progress": 0,
     completed: 0,
   };
+  const chartOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "#ffffff", // 👈 makes legend text white
+        },
+      },
+    },
+  };
   projects.forEach((p) => {
     if (projectStatusCounts[p.status] !== undefined)
       projectStatusCounts[p.status]++;
@@ -156,13 +162,18 @@ const UserDashboard = () => {
         w-64 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50`}
       >
         <div className="flex justify-between items-center mb-6 md:hidden">
-          <h1 className="text-2xl font-bold">User</h1>
+          <h1 className="text-2xl font-bold">{userName}</h1>
           <button onClick={() => setSidebarOpen(false)}>
             <X size={24} />
           </button>
         </div>
 
-        <h1 className="hidden md:block text-2xl font-bold mb-6"> User</h1>
+        <div className="hidden md:flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{userName}</h1>
+          <span className="text-sm font-medium">
+            {userInfo?.role === "admin" ? "Admin" : "User"}
+          </span>
+        </div>
         <nav className="flex flex-col space-y-2 )">
           <Link
             to="/userDashboard"
@@ -176,12 +187,14 @@ const UserDashboard = () => {
           >
             <Folder size={18} /> Projects
           </Link>
-          <Link
-            to="/usersPage"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <Users size={18} /> Users
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/usersPage"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Users size={18} /> Users
+            </Link>
+          )}
           <Link
             to="/taskPage"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
@@ -208,15 +221,28 @@ const UserDashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="flex justify-between items-center  shadow px-4 py-2">
-          <SearchBar onSearch={handleSearch} suggestions={suggestions} />
           <div className="mt-6">
+            <SearchBar onSearch={handleSearch} suggestions={suggestions} />
             {results.length === 0 ? (
-              <p>No results yet.</p>
+              <p className="text-gray-500"></p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="absolute left-0 right-0 mt-1 bg-sky-700 border border-gray-200 rounded-xl shadow z-10 max-h-48 overflow-y-auto p-4 ml-65">
                 {results.map((item) => (
-                  <li key={item.id} className="p-2 border rounded-xl">
-                    {item.name} – {item.category}
+                  <li
+                    key={item._id || item.id}
+                    className="p-2 cursor-pointer hover:bg-sky-700"
+                  >
+                    <Link
+                      to={
+                        searchFilter === "project"
+                          ? `/projects/${item._id}`
+                          : `/taskDetail/${item._id}`
+                      }
+                      className="block w-full"
+                    >
+                      {item.name || item.title} –{" "}
+                      {item.category || "Task/Project"}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -262,7 +288,7 @@ const UserDashboard = () => {
                   <li key={p._id} className="py-2 flex justify-between">
                     <span>{p.name}</span>
                     <span
-                      className={`badge ${
+                      className={`w-30 h-8 flex items-center justify-center badge ${
                         p.status === "completed"
                           ? "badge-success"
                           : "badge-warning"
@@ -276,7 +302,7 @@ const UserDashboard = () => {
             </div>
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Project Status</h3>
-              <Pie data={projectChartData} />
+              <Pie data={projectChartData} options={chartOptions} />
             </div>
           </div>
 
@@ -289,7 +315,7 @@ const UserDashboard = () => {
                   <li key={t._id} className="py-2 flex justify-between">
                     <span>{t.title}</span>
                     <span
-                      className={`badge ${
+                      className={`w-30 h-8 flex items-center justify-center badge ${
                         t.status === "completed"
                           ? "badge-success"
                           : "badge-warning"
@@ -303,7 +329,7 @@ const UserDashboard = () => {
             </div>
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4">
               <h3 className="text-lg font-semibold mb-3">Task Status</h3>
-              <Pie data={taskChartData} />
+              <Pie data={taskChartData} options={chartOptions} />
             </div>
           </div>
         </main>
