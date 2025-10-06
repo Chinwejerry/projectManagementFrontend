@@ -165,7 +165,7 @@ const MessagePage = () => {
             inbox.map((msg) => (
               <li
                 key={msg._id}
-                className="bg-white p-4 rounded-xl shadow-md w-full"
+                className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
               >
                 <p>
                   <strong>From:</strong> {msg.sender?.firstName || "Unknown"}{" "}
@@ -177,6 +177,17 @@ const MessagePage = () => {
                 <p>
                   <strong>Content:</strong> {msg.content}
                 </p>
+                {msg.type === "project" && (
+                  <p>
+                    <strong>Project:</strong>{" "}
+                    {projects.find(
+                      (p) =>
+                        p._id ===
+                        (msg.project?._id ||
+                          (typeof msg.project === "string" ? msg.project : ""))
+                    )?.name || "Unknown"}
+                  </p>
+                )}
               </li>
             ))
           ) : (
@@ -190,18 +201,30 @@ const MessagePage = () => {
         <ul className="space-y-3">
           {sent.length ? (
             sent.map((msg) => {
-              const recipientName = msg.recipient
-                ? `${msg.recipient.firstName || ""} ${
-                    msg.recipient.lastName || ""
-                  }`.trim()
-                : "Unknown";
+              let toDisplay = "Unknown";
+              if (msg.type === "direct" && msg.recipient) {
+                toDisplay = `${msg.recipient.firstName || ""} ${
+                  msg.recipient.lastName || ""
+                }`.trim();
+              } else if (msg.type === "project") {
+                toDisplay =
+                  projects.find(
+                    (p) =>
+                      p._id ===
+                      (msg.project?._id ||
+                        (typeof msg.project === "string" ? msg.project : ""))
+                  )?.name || "Unknown";
+              } else if (msg.type === "general") {
+                toDisplay = "All Users";
+              }
+
               return (
                 <li
                   key={msg._id}
-                  className="bg-white p-4 rounded-xl shadow-md w-full"
+                  className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
                 >
                   <p>
-                    <strong>To:</strong> {recipientName}
+                    <strong>To:</strong> {toDisplay}
                   </p>
                   <p>
                     <strong>Type:</strong> {msg.type}
@@ -223,7 +246,7 @@ const MessagePage = () => {
         <Modal
           isOpen={modalOpen}
           onRequestClose={() => setModalOpen(false)}
-          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow-lg rounded-lg p-6 w-96 mx-auto mt-20 flex flex-col gap-4"
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow-lg rounded-lg p-6 w-80 mx-auto mt-20 flex flex-col gap-4 text-left"
           overlayClassName="fixed inset-0 bg-opacity-50 bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover flex justify-start items-start"
         >
           <h2 className="text-2xl font-bold text-white mb-4">New Message</h2>
@@ -272,7 +295,7 @@ const MessagePage = () => {
             )}
 
             <textarea
-              className="border border-white p-2 rounded bg-white text-black h-40 resize-none"
+              className="border border-white p-2 rounded bg-white text-black h-32 resize-none"
               placeholder="Message content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
