@@ -109,7 +109,7 @@ const CreateTask = () => {
             projectId,
             assignedTo,
             priority,
-
+            dueDate,
             types,
             status,
             estimatedDurationHours: estimatedDurationHours

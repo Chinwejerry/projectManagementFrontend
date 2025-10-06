@@ -16,13 +16,13 @@ const ProjectDetails = () => {
     startDate: "",
     endDate: "",
     members: [],
+    estimatedDurationHours: 0, // ← اضافه شد
   });
   const [allUsers, setAllUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  // fetch project, tasks, and users
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -38,6 +38,7 @@ const ProjectDetails = () => {
           startDate: data.startDate,
           endDate: data.endDate,
           members: data.members.map((m) => m._id),
+          estimatedDurationHours: data.estimatedDurationHours || 0, // ← اضافه شد
         });
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -124,16 +125,13 @@ const ProjectDetails = () => {
   return (
     <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
       <span
-        className="p-4 text-cyan-50  flex items-start"
+        className="p-4 text-cyan-50 flex items-start"
         onClick={() => window.history.back()}
       >
         <ArrowBigLeft />
       </span>
       <div className="flex flex-col min-h-screen bg-gray-100 p-4 space-y-3">
-        <div
-          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6  flex flex-col gap-4
-      "
-        >
+        <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50 w-96 md:w-[100%] shadow rounded-lg p-6 flex flex-col gap-4">
           {editing ? (
             <div className="flex flex-col gap-3">
               <input
@@ -161,6 +159,17 @@ const ProjectDetails = () => {
                 <option value="completed">Completed</option>
               </select>
 
+              {/* Estimated Duration */}
+              <input
+                type="number"
+                min="0"
+                name="estimatedDurationHours"
+                value={formData.estimatedDurationHours}
+                onChange={handleEditChange}
+                className="border border-white text-white p-2 rounded w-full"
+                placeholder="Estimated Duration Hours"
+              />
+
               {/* Members checkboxes */}
               <div>
                 <p className="font-semibold text-white">Members:</p>
@@ -173,7 +182,7 @@ const ProjectDetails = () => {
                         type="checkbox"
                         checked={formData.members.includes(user._id)}
                         onChange={() => handleMemberToggle(user._id)}
-                        className="mr-2 "
+                        className="mr-2"
                       />
                       {user.firstName} {user.lastName} ({user.email})
                     </label>
@@ -227,6 +236,9 @@ const ProjectDetails = () => {
               <p className="white">
                 End Date: {new Date(project.endDate).toLocaleDateString()}
               </p>
+              <p className="white">
+                Estimated Duration: {project.estimatedDurationHours} hours
+              </p>
 
               <div>
                 <p className="font-semibold text-white">Members:</p>
@@ -272,18 +284,15 @@ const ProjectDetails = () => {
         </div>
 
         {/* Tasks List */}
-        <div
-          className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800  z-50  w-96 md:w-[100%] shadow rounded-lg p-6  flex flex-col gap-4
-      "
-        >
+        <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 z-50 w-96 md:w-[100%] shadow rounded-lg p-6 flex flex-col gap-4">
           <h2 className="text-xl font-bold mb-4 text-white">Tasks</h2>
           {tasks.length === 0 ? (
             <p>No tasks for this project.</p>
           ) : (
-            <table className=" table-auto w-full border-collapse border border-white">
+            <table className="table-auto w-full border-collapse border border-white">
               <thead>
-                <tr className="bg-gray-200 ">
-                  <th className=" text-white border  border-white px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
+                <tr className="bg-gray-200">
+                  <th className="text-white border border-white px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
                     Title
                   </th>
                   <th className="border text-white border-white px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">

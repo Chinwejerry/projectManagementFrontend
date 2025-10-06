@@ -6,16 +6,15 @@ const CreateProject = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  //const [members, setMembers] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [type, setType] = useState("");
-
+  const [estimatedDurationHours, setEstimatedDurationHours] = useState(""); // ← اضافه شد
+  const [selectedMembers, setSelectedMembers] = useState([]);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -28,9 +27,7 @@ const CreateProject = () => {
       try {
         const res = await fetch(
           "https://projectmanegerbackend-1.onrender.com/api/users",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to load users");
@@ -45,14 +42,6 @@ const CreateProject = () => {
     fetchUsers();
   }, []);
 
-  // const handleMemberChange = (e) => {
-  //   const value = Array.from(
-  //     e.target.selectedOptions,
-  //     (option) => option.value
-  //   );
-  //   setSelectedMembers(value);
-  // };
-  //check
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -60,7 +49,6 @@ const CreateProject = () => {
 
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         alert("Please log in as admin first");
         navigate("/login");
@@ -79,9 +67,12 @@ const CreateProject = () => {
             name,
             description,
             status,
+            type,
             startDate,
             endDate,
-            type,
+            estimatedDurationHours: estimatedDurationHours
+              ? Number(estimatedDurationHours)
+              : 0, // ← اضافه شد
             members: selectedMembers,
             attachments: [],
           }),
@@ -89,10 +80,7 @@ const CreateProject = () => {
       );
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to create project");
-      }
+      if (!res.ok) throw new Error(data.message || "Failed to create project");
 
       alert("Project created successfully ✅");
       navigate("/projects");
@@ -153,7 +141,15 @@ const CreateProject = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
 
-          {/* NEW: Type dropdown */}
+          <input
+            type="number"
+            min="0"
+            placeholder="Estimated Hours"
+            className="border border-white bg-transparent text-white p-2 rounded"
+            value={estimatedDurationHours}
+            onChange={(e) => setEstimatedDurationHours(e.target.value)}
+          />
+
           <select
             className="border border-white text-white bg-transparent p-2 rounded"
             value={type}
@@ -168,7 +164,6 @@ const CreateProject = () => {
             <option value="R&D">R&D</option>
           </select>
 
-          {/* Status dropdown */}
           <select
             className="border border-white text-white bg-transparent p-2 rounded"
             value={status}
@@ -223,4 +218,3 @@ const CreateProject = () => {
 };
 
 export default CreateProject;
-//here
