@@ -19,7 +19,6 @@ const MessagePage = () => {
   const [role] = useState(localStorage.getItem("role") || "");
   const token = localStorage.getItem("token");
 
-  // Fetch inbox & sent messages
   const fetchMessages = async () => {
     setLoading(true);
     try {
@@ -27,8 +26,6 @@ const MessagePage = () => {
         "https://projectmanegerbackend-1.onrender.com/api/messages/inbox",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (!inboxRes.ok)
-        throw new Error(`Inbox fetch failed: ${inboxRes.status}`);
       const inboxData = await inboxRes.json();
       setInbox(Array.isArray(inboxData) ? inboxData : []);
 
@@ -37,8 +34,6 @@ const MessagePage = () => {
           "https://projectmanegerbackend-1.onrender.com/api/messages/sent",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        if (!sentRes.ok)
-          throw new Error(`Sent fetch failed: ${sentRes.status}`);
         const sentData = await sentRes.json();
         setSent(Array.isArray(sentData) ? sentData : []);
       }
@@ -49,7 +44,6 @@ const MessagePage = () => {
     }
   };
 
-  // Fetch projects and users for modal
   const fetchProjectsAndUsers = async () => {
     try {
       if (role === "admin") {
@@ -84,14 +78,13 @@ const MessagePage = () => {
     fetchProjectsAndUsers();
   }, []);
 
-  async function handleSendMessage(e) {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     try {
       if (role === "user") return;
 
       let url = "https://projectmanegerbackend-1.onrender.com/api/messages/";
       const body = { content };
-
       if (messageType === "general") url += "general";
       else if (messageType === "project") {
         url += "project";
@@ -121,188 +114,180 @@ const MessagePage = () => {
       console.error(err);
       alert(err.message);
     }
-  }
+  };
 
-  if (loading) return <p>Loading messages...</p>;
+  if (loading) return <p className="p-4 text-white">Loading messages...</p>;
 
   return (
-    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800">
+    <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 min-h-screen p-4">
       <span
-        className="p-4 text-cyan-50 flex items-start"
+        className="p-4 text-cyan-50 flex items-start cursor-pointer"
         onClick={() => window.history.back()}
       >
         <ArrowBigLeft />
       </span>
-      <div className="flex justify-center flex-col space-y-3 items-center min-h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
-        <h1 className="text-2xl font-bold mb-4 text-sky-700">Messages</h1>
 
-        <div className="flex gap-4 mb-4">
+      <h1 className="text-3xl font-bold text-white mb-4">Messages</h1>
+
+      <div className="flex gap-4 mb-4">
+        <button
+          className={`px-4 py-2 rounded ${
+            activeTab === "inbox" ? "bg-sky-700 text-white" : "bg-gray-300"
+          }`}
+          onClick={() => setActiveTab("inbox")}
+        >
+          Inbox
+        </button>
+        {role === "admin" && (
           <button
             className={`px-4 py-2 rounded ${
-              activeTab === "inbox" ? "bg-sky-700 text-white" : "bg-gray-300"
+              activeTab === "sent" ? "bg-sky-600 text-white" : "bg-gray-300"
             }`}
-            onClick={() => setActiveTab("inbox")}
+            onClick={() => setActiveTab("sent")}
           >
-            Inbox
+            Sent Messages
           </button>
-          {role === "admin" && (
-            <button
-              className={`px-4 py-2 rounded ${
-                activeTab === "sent" ? "bg-sky-600 text-white" : "bg-gray-700"
-              }`}
-              onClick={() => setActiveTab("sent")}
-            >
-              Sent Messages
-            </button>
-          )}
-          {role === "admin" && (
-            <button
-              className="px-4 py-2 rounded bg-green-600 text-white"
-              onClick={() => setModalOpen(true)}
-            >
-              Create Message
-            </button>
-          )}
-        </div>
-
-        {/* Inbox */}
-        {activeTab === "inbox" &&
-          (inbox.length ? (
-            <ul className="space-y-2">
-              {inbox.map((msg) => (
-                <li
-                  key={msg._id}
-                  className="border p-2 rounded border-white bg-sky-300 text-black w-100"
-                >
-                  <strong>From:</strong> {msg.sender?.firstName || "Unknown"}{" "}
-                  {msg.sender?.lastName || ""} <br />
-                  <strong>Type:</strong> {msg.type} <br />
-                  <strong>Content:</strong> {msg.content} <br />
-                  {msg.type === "project" && (
-                    <small>
-                      Project:{" "}
-                      {msg.project?.name ||
-                        projects.find(
-                          (p) => p._id === (msg.project?._id || msg.project)
-                        )?.name ||
-                        "Unknown"}
-                    </small>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No inbox messages</p>
-          ))}
-
-        {/* Sent */}
-        {activeTab === "sent" &&
-          role === "admin" &&
-          (sent.length ? (
-            <ul className="space-y-2 ">
-              {sent.map((msg) => {
-                const recipientName = msg.recipient
-                  ? `$
-                  {msg.recipient?.firstName || ""} $
-                  {msg.recipient?.lastName || ""}`.trim()
-                  : "Unknown";
-                const projectName =
-                  msg.project?.name ||
-                  projects.find(
-                    (p) => p._id === (msg.project?._id || msg.project)
-                  )?.name ||
-                  "Unknown";
-                let toDisplay = "All Users";
-                if (msg.type === "direct") toDisplay = recipientName;
-                else if (msg.type === "project")
-                  toDisplay = `Project: ${projectName}`;
-                return (
-                  <li
-                    key={msg._id}
-                    className="border p-2 rounded border-white text-black bg-sky-300 w-100"
-                  >
-                    <strong>To:</strong> {toDisplay} <br />
-                    <strong>Type:</strong> {msg.type} <br />
-                    <strong>Content:</strong> {msg.content}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <p>No sent messages</p>
-          ))}
-
-        {/* Modal */}
-
+        )}
         {role === "admin" && (
-          <Modal
-            isOpen={modalOpen}
-            onRequestClose={() => setModalOpen(false)}
-            className="p-6 rounded shadow-lg max-w-md mx-auto mt-20 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800"
-            overlayClassName="fixed inset-0  bg-opacity-50 bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover flex justify-center items-start"
+          <button
+            className="px-4 py-2 rounded bg-green-600 text-white"
+            onClick={() => setModalOpen(true)}
           >
-            <h2 className="text-xl font-bold mb-4 text-white">New Message</h2>
-            <form onSubmit={handleSendMessage} className="flex flex-col gap-3">
-              <select
-                className="border p-2 rounded border-white text-white bg-transparent"
-                value={messageType}
-                onChange={(e) => setMessageType(e.target.value)}
-              >
-                <option value="general">General</option>
-                <option value="project">Project</option>
-                <option value="direct">Direct</option>
-              </select>
-
-              {messageType === "project" && (
-                <select
-                  className="border p-2 rounded  border-white text-white bg-transparent"
-                  value={projectId}
-                  onChange={(e) => setProjectId(e.target.value)}
-                  required
-                >
-                  <option value="">-- Select Project --</option>
-                  {projects.map((p) => (
-                    <option key={p._id} value={p._id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-
-              {messageType === "direct" && (
-                <select
-                  className="border p-2 rounded  border-white text-white bg-transparent"
-                  value={recipientId}
-                  onChange={(e) => setRecipientId(e.target.value)}
-                  required
-                >
-                  <option value="">-- Select User --</option>
-                  {users.map((u) => (
-                    <option key={u._id} value={u._id}>
-                      {u.firstName} {u.lastName}
-                    </option>
-                  ))}
-                </select>
-              )}
-
-              <textarea
-                className="border p-2 rounded  border-white text-white bg-transparent"
-                placeholder="Message content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              ></textarea>
-
-              <button
-                type="submit"
-                className="bg-sky-800 text-white py-2 rounded"
-              >
-                Send Message
-              </button>
-            </form>
-          </Modal>
+            New Message
+          </button>
         )}
       </div>
+
+      {/* Inbox */}
+      {activeTab === "inbox" && (
+        <ul className="space-y-3">
+          {inbox.length ? (
+            inbox.map((msg) => (
+              <li
+                key={msg._id}
+                className="bg-white p-4 rounded-xl shadow-md w-full"
+              >
+                <p>
+                  <strong>From:</strong> {msg.sender?.firstName || "Unknown"}{" "}
+                  {msg.sender?.lastName || ""}
+                </p>
+                <p>
+                  <strong>Type:</strong> {msg.type}
+                </p>
+                <p>
+                  <strong>Content:</strong> {msg.content}
+                </p>
+              </li>
+            ))
+          ) : (
+            <p className="text-white">No inbox messages</p>
+          )}
+        </ul>
+      )}
+
+      {/* Sent */}
+      {activeTab === "sent" && role === "admin" && (
+        <ul className="space-y-3">
+          {sent.length ? (
+            sent.map((msg) => {
+              const recipientName = msg.recipient
+                ? `${msg.recipient.firstName || ""} ${
+                    msg.recipient.lastName || ""
+                  }`.trim()
+                : "Unknown";
+              return (
+                <li
+                  key={msg._id}
+                  className="bg-white p-4 rounded-xl shadow-md w-full"
+                >
+                  <p>
+                    <strong>To:</strong> {recipientName}
+                  </p>
+                  <p>
+                    <strong>Type:</strong> {msg.type}
+                  </p>
+                  <p>
+                    <strong>Content:</strong> {msg.content}
+                  </p>
+                </li>
+              );
+            })
+          ) : (
+            <p className="text-white">No sent messages</p>
+          )}
+        </ul>
+      )}
+
+      {/* Modal */}
+      {role === "admin" && (
+        <Modal
+          isOpen={modalOpen}
+          onRequestClose={() => setModalOpen(false)}
+          className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow-lg rounded-lg p-6 w-96 mx-auto mt-20 flex flex-col gap-4"
+          overlayClassName="fixed inset-0 bg-opacity-50 bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover flex justify-start items-start"
+        >
+          <h2 className="text-2xl font-bold text-white mb-4">New Message</h2>
+          <form onSubmit={handleSendMessage} className="flex flex-col gap-3">
+            <select
+              className="border border-white text-white bg-transparent p-2 rounded"
+              value={messageType}
+              onChange={(e) => setMessageType(e.target.value)}
+            >
+              <option value="general">General</option>
+              <option value="project">Project</option>
+              <option value="direct">Direct</option>
+            </select>
+
+            {messageType === "project" && (
+              <select
+                className="border border-white text-white bg-transparent p-2 rounded"
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+                required
+              >
+                <option value="">-- Select Project --</option>
+                {projects.map((p) => (
+                  <option key={p._id} value={p._id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {messageType === "direct" && (
+              <div className="flex flex-col max-h-40 overflow-y-auto border p-2 rounded bg-white text-black">
+                {users.map((u) => (
+                  <label key={u._id} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="recipient"
+                      value={u._id}
+                      checked={recipientId === u._id}
+                      onChange={() => setRecipientId(u._id)}
+                    />
+                    {u.firstName} {u.lastName}
+                  </label>
+                ))}
+              </div>
+            )}
+
+            <textarea
+              className="border border-white p-2 rounded bg-white text-black h-40 resize-none"
+              placeholder="Message content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
+
+            <button
+              type="submit"
+              className="bg-sky-700 text-white py-2 rounded hover:bg-blue-700"
+            >
+              Send Message
+            </button>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };
