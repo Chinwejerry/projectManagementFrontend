@@ -167,7 +167,7 @@ const AdminDashboard = () => {
         w-64 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 p-4 z-50`}
       >
         <div className="flex justify-between items-center mb-6 md:hidden">
-          <h1 className="text-2xl font-bold">Admin</h1>
+          <h1 className="text-2xl font-bold">{userName}</h1>
           <button onClick={() => setSidebarOpen(false)}>
             <X size={24} />
           </button>
