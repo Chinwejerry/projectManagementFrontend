@@ -17,6 +17,7 @@ import ProfilePage from "./pages/profilePage";
 import ProjectDetails from "./pages/projectDetails";
 import MessagesPage from "./pages/messagesPage";
 import AIReportPage from "./pages/AIReportPage";
+import AIAssistantPage from "./pages/AIAssistantPage.jsx";
 
 function ProtectedRoute({ children, role }) {
   const token = localStorage.getItem("token");
@@ -155,6 +156,14 @@ function App() {
           element={
             <ProtectedRoute role="admin">
               <AIReportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ai-assistant"
+          element={
+            <ProtectedRoute role="admin">
+              <AIAssistantPage />
             </ProtectedRoute>
           }
         />
