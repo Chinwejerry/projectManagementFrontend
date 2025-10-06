@@ -200,6 +200,13 @@ const AdminDashboard = () => {
           </Link>
 
           <Link
+            to="/ai-assistant"
+            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+          >
+            <ClipboardList size={18} /> AI Assistant
+          </Link>
+
+          <Link
             to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
