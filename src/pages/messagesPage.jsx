@@ -157,7 +157,6 @@ const MessagePage = () => {
           </button>
         )}
       </div>
-
       {/* Inbox */}
       {activeTab === "inbox" && (
         <ul className="space-y-3">
