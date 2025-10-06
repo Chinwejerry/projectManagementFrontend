@@ -8,6 +8,8 @@ import {
   Home,
   Folder,
   Users,
+  Compass,
+  Mail,
   ClipboardList,
   X,
 } from "lucide-react";
@@ -23,7 +25,7 @@ const UsersPage = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const userName = userInfo ? `${userInfo.firstName}` : "User";
-  //const isAdmin = userInfo?.role === "admin";
+  const isAdmin = userInfo?.role === "admin";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -120,7 +122,13 @@ const UsersPage = () => {
         </div>
         <nav className="flex flex-col space-y-2">
           <Link
-            to="/adminDashboard"
+            to={
+              userInfo
+                ? userInfo.role === "admin"
+                  ? "/adminDashboard"
+                  : "/userDashboard"
+                : "/login"
+            }
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
             <Home size={18} /> Dashboard
@@ -131,30 +139,36 @@ const UsersPage = () => {
           >
             <Folder size={18} /> Projects
           </Link>
-          <Link
-            to="/usersPage"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <Users size={18} /> Users
-          </Link>
+
           <Link
             to="/taskPage"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
             <ClipboardList size={18} /> Tasks
           </Link>
+
+          {isAdmin && (
+            <Link
+              to="/ai-assistant"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Compass size={18} /> AI Assistant
+            </Link>
+          )}
           <Link
             to="/messages"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
           >
-            <ClipboardList size={18} /> Messages
+            <Mail size={18} /> Messages
           </Link>
-          <Link
-            to="/ai-report"
-            className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
-          >
-            <ClipboardList size={18} /> AI Report
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/usersPage"
+              className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
+            >
+              <Users size={18} /> Users
+            </Link>
+          )}
           <Link
             to="/"
             className="flex items-center gap-2 p-2 rounded hover:bg-sky-600"
