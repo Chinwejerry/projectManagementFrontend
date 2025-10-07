@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { ArrowBigLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import {
+  Sparkles,
+  ClipboardCheck,
+  AlertTriangle,
+  ArrowBigLeft,
+} from "lucide-react";
 
 const AIAssistantPage = () => {
   const [step, setStep] = useState(0);
@@ -164,32 +171,34 @@ const AIAssistantPage = () => {
         <ArrowBigLeft />
       </span>
       <div className="flex justify-center flex-col space-y-3 items-center min-h-screen bg-[url('/images/bg.png')] bg-no-repeat bg-center bg-cover p-4">
-        <h1 className="text-2xl font-bold mb-4 text-black">AI Assistant</h1>
+        <h1 className="text-2xl font-bold mb-4 text-sky-800">
+          Hello! How can i assist you?
+        </h1>
 
         {/* Step 0: Feature Selection */}
         {step === 0 && (
-          <div className="flex flex-col gap-3 max-w-md">
+          <div className="flex  gap-3  items-center justify-center flex-wrap">
             <button
               onClick={() => handleFeatureSelect("managementOverview")}
-              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+              className="px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl hover:bg-sky-700 "
             >
               Generate Management Overview
             </button>
             <button
               onClick={() => handleFeatureSelect("suggestTasks")}
-              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+              className="px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl hover:bg-sky-700"
             >
               Suggest New Tasks
             </button>
             <button
               onClick={() => handleFeatureSelect("projectRisk")}
-              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+              className="px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl hover:bg-sky-700"
             >
               Analyze Project Risk
             </button>
             <button
               onClick={() => handleFeatureSelect("userStatus")}
-              className="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700"
+              className="px-4 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl hover:bg-sky-700"
             >
               Show user Worklogs
             </button>
@@ -233,76 +242,150 @@ const AIAssistantPage = () => {
 
             <button
               onClick={handleSend}
-              className="px-6 py-2 bg-sky-600 text-white rounded hover:bg-sky-700 disabled:bg-gray-400"
+              disabled={loading}
+              className="flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white rounded-xl hover:opacity-90 disabled:opacity-60 transition-all shadow-sm"
             >
-              {loading ? "Thinking..." : "Send"}
+              {loading ? (
+                <>
+                  <Sparkles className="animate-spin text-sky-400 w-5 h-5" />
+                  Thinking...
+                </>
+              ) : (
+                "Send"
+              )}
             </button>
           </div>
         )}
 
         {/* Step 2: Show AI Response or Report */}
         {step === 2 && (
-          <div className="space-y-4 max-w-3xl">
-            {/* Management Overview */}
-            {report && (
-              <div className="space-y-3">
-                {report.split("\n\n").map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
+          <div className="max-w-3xl mx-auto space-y-6 ">
+            {/* Header */}
+            <div className="flex items-center gap-2  ">
+              <Sparkles className="text-sky-400" />
+              <h2 className="font-semibold text-xl text-sky-900">
+                AI Insights
+              </h2>
+            </div>
+
+            {/* Content Container */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 dark:bg-sky-600/80 backdrop-blur-md shadow-sm p-6 space-y-6 transition-all">
+              {/* Project Risk */}
+              {selectedFeature === "projectRisk" && (
+                <>
+                  <SectionTitle
+                    icon={<AlertTriangle className="text-amber-500" />}
                   >
-                    <pre className="whitespace-pre-wrap">{item}</pre>
-                  </div>
-                ))}
-              </div>
-            )}
+                    Project Risk Overview
+                  </SectionTitle>
 
-            {/* Project Risk */}
-            {selectedFeature === "projectRisk" && (
-              <div className="space-y-3">
-                {riskText && (
-                  <div className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left">
-                    <pre className="whitespace-pre-wrap">{riskText}</pre>
-                  </div>
-                )}
-                {riskTasks.length > 0 &&
-                  riskTasks.map((task, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
-                    >
-                      <pre className="whitespace-pre-wrap">{task}</pre>
-                    </div>
+                  {riskText && <AIBlock text={riskText} />}
+                  {riskTasks.map((task, i) => (
+                    <AIBlock key={i} text={task} />
                   ))}
-              </div>
-            )}
-
-            {/* Suggested Tasks & User Worklogs */}
-            {["suggestTasks", "userStatus"].includes(selectedFeature) &&
-              aiResponse && (
-                <div className="space-y-3">
-                  {aiResponse.split("\n\n").map((item, index) => (
-                    <div
-                      key={index}
-                      className="bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 text-white p-4 rounded-xl shadow-md w-full text-left"
-                    >
-                      <pre className="whitespace-pre-wrap">{item}</pre>
-                    </div>
-                  ))}
-                </div>
+                </>
               )}
 
-            <button
-              onClick={() => setStep(0)}
-              className="px-4 py-2 bg-sky-500 rounded text-white"
-            >
-              Back
-            </button>
+              {/* Suggested Tasks & Worklogs */}
+              {["suggestTasks", "userStatus"].includes(selectedFeature) &&
+                aiResponse && (
+                  <>
+                    <SectionTitle
+                      icon={<ClipboardCheck className="text-emerald-500" />}
+                    >
+                      Suggested Tasks & Worklogs
+                    </SectionTitle>
+                    {aiResponse.split("\n\n").map((chunk, i) => (
+                      <AIBlock key={i} text={chunk} />
+                    ))}
+                  </>
+                )}
+
+              {/* Management Report */}
+              {report && (
+                <>
+                  <SectionTitle icon={<Sparkles className="text-sky-500" />}>
+                    Management Summary
+                  </SectionTitle>
+                  {report.split("\n\n").map((chunk, i) => (
+                    <AIBlock key={i} text={chunk} />
+                  ))}
+                </>
+              )}
+            </div>
+
+            {/* Back Button */}
+            <div className="pt-4">
+              <Button onClick={() => setStep(0)}>← Back</Button>
+            </div>
           </div>
         )}
       </div>
     </div>
   );
 };
+
+function SectionTitle({ icon, children }) {
+  return (
+    <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-2 mb-2">
+      {icon}
+      <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+        {children}
+      </h3>
+    </div>
+  );
+}
+
+function AIBlock({ text, variant }) {
+  const bgClass =
+    variant === "report"
+      ? "bg-gradient-to-r from-blue-100 to-sky-200 dark:from-slate-800 dark:to-slate-900"
+      : "bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-100 dark:to-sky-300";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`${bgClass} text-slate-800 dark:text-sky-700 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow`}
+    >
+      <ReactMarkdown
+        components={{
+          h3: ({ ...props }) => (
+            <h3
+              className="text-lg font-bold !text-sky-800 !dark:text-sky-800 mb-2 border-b border-sky-300 pb-1"
+              {...props}
+            />
+          ),
+          h4: ({ ...props }) => (
+            <h4
+              className="text-md font-semibold !text-sky-800 !dark:text-sky-800 mb-1"
+              {...props}
+            />
+          ),
+          p: ({ ...props }) => (
+            <p
+              className="mb-2 !text-sky-800 !dark:text-sky-300 text-xl"
+              {...props}
+            />
+          ),
+        }}
+      >
+        {text}
+      </ReactMarkdown>
+    </motion.div>
+  );
+}
+
+function Button({ onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-4 py-2 bg-sky-600 hover:bg-sky-700 rounded-lg text-white font-medium transition-all shadow-sm"
+    >
+      {children}
+    </button>
+  );
+}
 
 export default AIAssistantPage;

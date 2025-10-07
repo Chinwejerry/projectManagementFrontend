@@ -314,12 +314,12 @@ const AdminDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
             <div className="card bg-gradient-to-r from-slate-600 via-sky-700 to-indigo-800 shadow p-4 lg:col-span-2 max-h-96  overflow-y-auto">
               <h3 className="text-lg font-semibold mb-3">Tasks</h3>
-              <ul className="divide-y">
+              <ul className="divide-y ">
                 {tasks.map((t) => (
                   <li key={t._id} className="py-2 flex justify-between gap-4">
-                    <span>{t.title}</span>
+                    <span className="w-90">{t.title}</span>
                     <span
-                      className="px-2 py-1 rounded-full text-sm font-semibold text-sky-800 w-30 h-8 flex items-center justify-center"
+                      className="self-center px-2 py-1 rounded-full text-sm font-semibold text-sky-800 w-25 h-8  text-center flex items-center justify-center"
                       style={{ backgroundColor: statusColors[t.status] }}
                     >
                       {t.status}
