@@ -11,6 +11,8 @@ import {
   LogOut,
   UserCircle,
   Menu,
+  Mail,
+  Compass,
   X,
 } from "lucide-react";
 import { Pie } from "react-chartjs-2";
